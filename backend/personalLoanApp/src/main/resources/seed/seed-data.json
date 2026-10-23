@@ -1,0 +1,61 @@
+{
+  "customers": [
+    { "username": "olivia.chen", "password": "password123", "fullName": "Olivia Chen" },
+    { "username": "mateo.singh", "password": "password123", "fullName": "Mateo Singh" }
+  ],
+  "officers": [
+    { "username": "jordan.lee", "password": "password123", "fullName": "Jordan Lee" }
+  ],
+  "applications": [
+    {
+      "customerUsername": "olivia.chen",
+      "requestKey": "6f1c2a8e-3b4d-4e5f-9a10-1b2c3d4e5f01",
+      "loanAmount": 12000.00,
+      "termMonths": 24,
+      "purpose": "Home improvement",
+      "employmentStatus": "EMPLOYED",
+      "monthlyIncome": 5200.00,
+      "status": "SUBMITTED",
+      "submittedAt": "2026-10-19T14:30:00Z"
+    },
+    {
+      "customerUsername": "mateo.singh",
+      "requestKey": "6f1c2a8e-3b4d-4e5f-9a10-1b2c3d4e5f02",
+      "loanAmount": 8000.00,
+      "termMonths": 12,
+      "purpose": "Car repair",
+      "employmentStatus": "SELF_EMPLOYED",
+      "monthlyIncome": 4100.00,
+      "status": "SUBMITTED",
+      "submittedAt": "2026-10-20T09:15:00Z"
+    },
+    {
+      "customerUsername": "olivia.chen",
+      "requestKey": "6f1c2a8e-3b4d-4e5f-9a10-1b2c3d4e5f03",
+      "loanAmount": 5000.00,
+      "termMonths": 12,
+      "purpose": "Debt consolidation",
+      "employmentStatus": "EMPLOYED",
+      "monthlyIncome": 5200.00,
+      "status": "APPROVED",
+      "submittedAt": "2026-10-20T11:00:00Z",
+      "decisionNote": null,
+      "decidedAt": "2026-10-20T16:45:00Z",
+      "decidedByUsername": "jordan.lee"
+    },
+    {
+      "customerUsername": "olivia.chen",
+      "requestKey": "6f1c2a8e-3b4d-4e5f-9a10-1b2c3d4e5f04",
+      "loanAmount": 20000.00,
+      "termMonths": 36,
+      "purpose": "Home improvement",
+      "employmentStatus": "EMPLOYED",
+      "monthlyIncome": 5200.00,
+      "status": "REJECTED",
+      "submittedAt": "2026-10-20T13:20:00Z",
+      "decisionNote": "Declared income does not support this request in the training scenario.",
+      "decidedAt": "2026-10-21T10:05:00Z",
+      "decidedByUsername": "jordan.lee"
+    }
+  ]
+}
