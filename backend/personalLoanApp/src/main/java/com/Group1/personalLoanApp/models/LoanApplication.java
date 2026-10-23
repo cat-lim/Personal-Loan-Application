@@ -17,7 +17,15 @@ import java.util.UUID;
     name = "loan_application",
     uniqueConstraints = @UniqueConstraint(
         name = "uk_loan_customer_request_key",
-        columnNames = {"customer_id", "request_key"})   // request key is unique per customer
+        columnNames = {"customer_id", "request_key"}),  // request key is unique per customer
+    // Pending rows have no decision fields; decided rows have all of them, and a rejection has a reason.
+    check = @CheckConstraint(
+        name = "ck_loan_decision_consistent",
+        constraint = "(status = 'SUBMITTED' AND decided_at IS NULL "
+            + "AND decided_by_officer_id IS NULL AND decision_note IS NULL) "
+            + "OR (status IN ('APPROVED', 'REJECTED') AND decided_at IS NOT NULL "
+            + "AND decided_by_officer_id IS NOT NULL "
+            + "AND (status <> 'REJECTED' OR NULLIF(BTRIM(decision_note), '') IS NOT NULL))")
 )
 public class LoanApplication {
 
