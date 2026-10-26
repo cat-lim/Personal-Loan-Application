@@ -5,9 +5,9 @@ import { Injectable } from '@angular/core';
 })
 
 export class LoanService {
-    submitApplication(firstName: string, lastName: string, email: string) {
+    submitApplication(loanAmount: string, loanTerm: string, loanPurpose: string, employmentStatus: string, monthlyIncome: string) {
         console.log(
-        `Homes application received: firstName: ${firstName}, lastName: ${lastName}, email: ${email}.`,
+        `Loan application received: loanAmount: ${loanAmount}, loanTerm: ${loanTerm}, loanPurpose: ${loanPurpose}, employmentStatus: ${employmentStatus}, monthlyIncome: ${monthlyIncome}.`,
         );
     }
 }
