@@ -1,79 +1,84 @@
 package com.Group1.personalLoanApp.seed;
 
-import com.Group1.personalLoanApp.models.LoanApplication;
-import com.Group1.personalLoanApp.models.LoanOfficer;
-import com.Group1.personalLoanApp.repository.CustomerRepository;
-import com.Group1.personalLoanApp.repository.LoanApplicationRepository;
-import com.Group1.personalLoanApp.repository.LoanOfficerRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.Group1.personalLoanApp.models.Customer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.Group1.personalLoanApp.models.LoanApplication;
+import com.Group1.personalLoanApp.models.LoanApplication.ApplicationStatus;
+import com.Group1.personalLoanApp.models.LoanApplication.EmploymentStatus;
+import com.Group1.personalLoanApp.models.LoanOfficer;
+import tools.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 /**
- * Runs once at startup, after Hibernate has created the tables.
- * Loads fictional data from seed/seed-data.json, but only if the database is empty,
- * so restarting the app never duplicates rows.
+ * Loads fictional data from src/main/resources/seed/seed-data.json when the app starts.
+ * Does nothing if the customer table already has rows.
+ *
+ * TODO (server-side step): hash passwords with BCrypt. For now they are stored as-is.
  */
 @Component
-@ConditionalOnProperty(name = "app.seed.enabled", havingValue = "true")
 public class DataSeeder implements CommandLineRunner {
 
-    private static final Logger log = LoggerFactory.getLogger(DataSeeder.class);
+    // ---- Shape of seed-data.json ----
+    record SeedData(List<UserSeed> customers, List<UserSeed> officers, List<ApplicationSeed> applications) { }
 
-    private final CustomerRepository customers;
-    private final LoanOfficerRepository officers;
-    private final LoanApplicationRepository applications;
+    record UserSeed(String username, String password, String fullName) { }
+
+    record ApplicationSeed(String customerUsername, UUID requestKey, BigDecimal loanAmount, int termMonths,
+                           String purpose, EmploymentStatus employmentStatus, BigDecimal monthlyIncome,
+                           ApplicationStatus status, Instant submittedAt, String decisionNote,
+                           Instant decidedAt, String decidedByUsername) { }
+
+    // ---- Seeding ----
+    @PersistenceContext
+    private EntityManager em;
+
     private final ObjectMapper objectMapper;
-    private final PasswordEncoder encoder;
 
-    public DataSeeder(CustomerRepository customers, LoanOfficerRepository officers,
-                      LoanApplicationRepository applications, ObjectMapper objectMapper,
-                      PasswordEncoder encoder) {
-        this.customers = customers;
-        this.officers = officers;
-        this.applications = applications;
+    public DataSeeder(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
-        this.encoder = encoder;
     }
 
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-        if (customers.count() > 0) {
-            log.info("Seed skipped: data already present");
-            return;
-        }
+        Long existing = em.createQuery("select count(c) from Customer c", Long.class).getSingleResult();
+        if (existing > 0) return;
 
         SeedData data;
         try (InputStream in = new ClassPathResource("seed/seed-data.json").getInputStream()) {
             data = objectMapper.readValue(in, SeedData.class);
         }
 
-        Map<String, Customer> customerByUsername = data.customers().stream()
-            .map(c -> customers.save(new Customer(c.username(), encoder.encode(c.password()), c.fullName())))
-            .collect(Collectors.toMap(Customer::getUsername, Function.identity()));
+        Map<String, Customer> customers = new HashMap<>();
+        for (UserSeed u : data.customers()) {
+            Customer c = new Customer(u.username(), u.password(), u.fullName());
+            em.persist(c);
+            customers.put(c.getUsername(), c);
+        }
 
-        Map<String, LoanOfficer> officerByUsername = data.officers().stream()
-            .map(o -> officers.save(new LoanOfficer(o.username(), encoder.encode(o.password()), o.fullName())))
-            .collect(Collectors.toMap(LoanOfficer::getUsername, Function.identity()));
+        Map<String, LoanOfficer> officers = new HashMap<>();
+        for (UserSeed u : data.officers()) {
+            LoanOfficer o = new LoanOfficer(u.username(), u.password(), u.fullName());
+            em.persist(o);
+            officers.put(o.getUsername(), o);
+        }
 
-        // Saved in file order, so the sequence hands out LN-1001, LN-1002, ... in that order.
-        for (SeedData.ApplicationSeed a : data.applications()) {
-            Customer owner = require(customerByUsername, a.customerUsername(), "customer");
+        // Saved in file order, so ids come out as 1001, 1002, ... (LN-1001, LN-1002, ...)
+        for (ApplicationSeed a : data.applications()) {
             LoanApplication loan = new LoanApplication();
-            loan.setCustomer(owner);
+            loan.setCustomer(customers.get(a.customerUsername()));
             loan.setRequestKey(a.requestKey());
             loan.setLoanAmount(a.loanAmount());
             loan.setTermMonths(a.termMonths());
@@ -84,19 +89,8 @@ public class DataSeeder implements CommandLineRunner {
             loan.setSubmittedAt(a.submittedAt());
             loan.setDecisionNote(a.decisionNote());
             loan.setDecidedAt(a.decidedAt());
-            if (a.decidedByUsername() != null) {
-                loan.setDecidedBy(require(officerByUsername, a.decidedByUsername(), "officer"));
-            }
-            applications.save(loan);
+            loan.setDecidedBy(a.decidedByUsername() == null ? null : officers.get(a.decidedByUsername()));
+            em.persist(loan);
         }
-
-        log.info("Seeded {} customers, {} officers, {} applications",
-            customerByUsername.size(), officerByUsername.size(), data.applications().size());
-    }
-
-    private static <T> T require(Map<String, T> map, String key, String kind) {
-        T value = map.get(key);
-        if (value == null) throw new IllegalStateException("Seed file references unknown " + kind + ": " + key);
-        return value;
     }
 }
