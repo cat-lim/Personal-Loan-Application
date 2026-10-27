@@ -21,7 +21,7 @@ public record LoanSubmissionRequest (
 
         @NotBlank(message = "Employment status required")
         @Pattern(
-                regexp = "EMPLOYED | SELF_EMPLOYED | UNEMPLOYED",
+                regexp = "EMPLOYED | SELF_EMPLOYED | RETIRED | OTHERS",
                 message = "Employee status must be filled out."
         )
         String employmentStatus,
