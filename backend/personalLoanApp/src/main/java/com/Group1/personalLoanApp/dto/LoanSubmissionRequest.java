@@ -1,4 +1,5 @@
 package com.Group1.personalLoanApp.dto;
+import com.Group1.personalLoanApp.models.LoanApplication;
 import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 
@@ -20,11 +21,7 @@ public record LoanSubmissionRequest (
         String purpose,
 
         @NotBlank(message = "Employment status required")
-        @Pattern(
-                regexp = "EMPLOYED | SELF_EMPLOYED | RETIRED | OTHERS",
-                message = "Employee status must be filled out."
-        )
-        String employmentStatus,
+        LoanApplication.EmploymentStatus employmentStatus,
 
         @NotNull
         @DecimalMin("0.00")
