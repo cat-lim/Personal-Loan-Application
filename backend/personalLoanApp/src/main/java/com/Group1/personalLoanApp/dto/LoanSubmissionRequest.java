@@ -12,9 +12,7 @@ public record LoanSubmissionRequest (
         @Digits(integer = 12, fraction = 2)
         BigDecimal amount,
 
-        @NotNull
-        @Min(1)
-        @Max(360)
+        @NotNull(message = "Term is required")
         Integer termMonths,
 
         @NotBlank
@@ -23,7 +21,7 @@ public record LoanSubmissionRequest (
 
         @NotBlank(message = "Employment status required")
         @Pattern(
-                regexp = "EMPLOYED | SELF_EMPLOYED | UNEMPLPYOYED",
+                regexp = "EMPLOYED | SELF_EMPLOYED | RETIRED | OTHERS",
                 message = "Employee status must be filled out."
         )
         String employmentStatus,
