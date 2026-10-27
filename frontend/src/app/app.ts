@@ -18,6 +18,6 @@ import {Home} from './home/home';
   styleUrls: ['./app.css'],
 })
 export class App {
-  title = 'default';
+  title = 'Northstar Bank';
 }
 
