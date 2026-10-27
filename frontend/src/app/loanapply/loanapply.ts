@@ -12,7 +12,20 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/
         <form [formGroup]="applyForm" (ngSubmit)="submitApplication()">
 
           <label for="loan-amount">Loan Amount (USD)</label>
-          <input id="loan-amount" name="number" type="number" min="1000" max="50000" step="1" formControlName="loanAmount" required/>
+          <input id="loan-amount" name="number" type="number" min="1000" max="50000" step="1" formControlName="loanAmount" required>
+            
+          <!-- Error messages for loan amount -->
+          @if (showControlError(applyForm.controls.loanAmount)) {
+            <p id="loan-amount-error" class="form-error">
+              @if (applyForm.controls.loanAmount.hasError('required')) {
+                Enter a loan amount.
+              } @else if (applyForm.controls.loanAmount.hasError('min')) {
+                The minimum loan amount is $1,000.
+              } @else if (applyForm.controls.loanAmount.hasError('max')) {
+                The maximum loan amount is $50,000.
+              }
+            </p>
+          }
           
           <label for="loan-term">Loan Term</label>
           <select id="loan-term" formControlName="loanTerm" required>
@@ -21,8 +34,18 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/
             <option value="36">36 months</option>
           </select>
 
+          <!-- Error message for loan term -->
+          @if (showControlError(applyForm.controls.loanTerm)) {
+            <p id="loan-term-error" class="form-error">Choose a loan term.</p>
+          }
+
           <label for="loan-purpose">Loan Purpose</label>
-          <input id="loan-purpose" type="text" formControlName="loanPurpose" required/>
+          <input id="loan-purpose" type="text" formControlName="loanPurpose" required>
+
+          <!-- Error message for loan purpose -->
+          @if (showControlError(applyForm.controls.loanPurpose)) {
+            <p id="loan-purpose-error" class="form-error">Enter a loan purpose.</p>
+          }
 
           <label for="employment-status">Employment Status</label>
           <select id="employment-status" formControlName="employmentStatus" required>
@@ -32,8 +55,24 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/
             <option value="other">Other</option>
           </select>
 
+          <!-- Error message for employment status -->
+          @if (showControlError(applyForm.controls.employmentStatus)) {
+            <p id="employment-status-error" class="form-error">Choose an employment status.</p>
+          }
+
           <label for="monthly-income">Monthly Income (USD)</label>
-          <input id="monthly-income" name="number" type="number" min="0" step="1" formControlName="monthlyIncome" required />
+          <input id="monthly-income" name="number" type="number" min="0" step="1" formControlName="monthlyIncome" required>
+          
+          <!-- Error messages for monthly income -->
+          @if (showControlError(applyForm.controls.monthlyIncome)) {
+            <p id="monthly-income-error" class="form-error">
+              @if (applyForm.controls.monthlyIncome.hasError('required')) {
+                Enter your monthly income.
+              } @else if (applyForm.controls.monthlyIncome.hasError('min')) {
+                Monthly income cannot be less than $0.
+              }
+            </p>
+          }
           
           @if (submitted && applyForm.invalid) {
             <p class="form-error" role="alert">
@@ -65,6 +104,10 @@ export class LoanApplication {
     ]),
   });
   submitted = false;
+
+  showControlError(control: FormControl): boolean {
+    return control.invalid && (control.touched || this.submitted);
+  }
 
   submitApplication() {
     this.submitted = true;
