@@ -1,4 +1,4 @@
-package com.Group1.personalLoanApp.model;
+package com.Group1.personalLoanApp.dto;
 
 public class OfficerApplication {
 }
