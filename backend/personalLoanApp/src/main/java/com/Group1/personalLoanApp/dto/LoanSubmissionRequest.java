@@ -25,6 +25,14 @@ public record LoanSubmissionRequest (
         @DecimalMin("0.00")
         @Digits(integer = 12, fraction = 2)
         BigDecimal monthlyIncome
-){}
+){
+        @AssertTrue(message = "Term must be 12, 24 or 36 months")
+        public boolean isValidTerm(){
+                return termMonths == null ||
+                        termMonths == 12 ||
+                        termMonths == 24 ||
+                        termMonths == 36;
+        }
+}
     //this class defines the information the customer submits
 
