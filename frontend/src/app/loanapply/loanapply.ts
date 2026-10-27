@@ -12,7 +12,7 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/
         <form [formGroup]="applyForm" (ngSubmit)="submitApplication()">
 
           <label for="loan-amount">Loan Amount (USD)</label>
-          <input id="loan-amount" name="number" type="number" min="1000" max="50000" step="1" formControlName="loanAmount" required>
+          <input id="loan-amount" name="number" type="number" min="1000" max="50000" step="0.01" formControlName="loanAmount" required>
             
           <!-- Error messages for loan amount -->
           @if (showControlError(applyForm.controls.loanAmount)) {
@@ -23,6 +23,8 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/
                 The minimum loan amount is $1,000.
               } @else if (applyForm.controls.loanAmount.hasError('max')) {
                 The maximum loan amount is $50,000.
+              } @else if (applyForm.controls.loanAmount.hasError('pattern')) {
+                Enter no more than two decimal places.
               }
             </p>
           }
@@ -94,6 +96,7 @@ export class LoanApplication {
       Validators.required,
       Validators.min(1000),
       Validators.max(50000),
+      Validators.pattern(/^\d+(\.\d{1,2})?$/),
     ]),
     loanTerm: new FormControl('', Validators.required),
     loanPurpose: new FormControl('', Validators.required),
