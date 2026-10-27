@@ -1,54 +1,65 @@
 package com.Group1.personalLoanApp.Service;
 import com.Group1.personalLoanApp.dto.LoanSubmissionRequest;
 import com.Group1.personalLoanApp.dto.LoanSubmissionResponse;
+import com.Group1.personalLoanApp.models.LoanApplication;
+import com.Group1.personalLoanApp.repository.LoanApplicationRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.web.access.intercept.RequestKey;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 
 public class LoanSubmissionService {
-    private final ConcurrentHashMap<RequestKey, StoredSubmission>
-              submissions = new ConcurrentHashMap<>();
+    private final LoanApplicationRepository loans;
+    private final LoanSubmissionWrite write;
 
+    public LoanSubmissionService(LoanApplicationRepository loans, LoanSubmissionWrite write){
+        this.loans = loans;
+        this.write = write;
+    }
     public SubmissionResult submit(
-            String customerId,
-            String requestKey,
+            Long customerId,
+            UUID requestKey,
             LoanSubmissionRequest request
     ) {
-        AtomicBoolean created = new AtomicBoolean(false);
-        RequestKey key = new RequestKey(customerId, requestKey);
+        var existing = loans.findByCustomerIdAndRequestKey(customerId, requestKey);
+        if (existing.isPresent()) {
+            return checkRetry(existing.get(), request);
+        }
+        try {
+            LoanApplication saved = write.insert(customerId, requestKey, request);
+            return new SubmissionResult(toResponse(saved), true);
+        } catch (DataIntegrityViolationException ex) {
+            LoanApplication saved = loans.findByCustomerIdAndRequestKey(customerId, requestKey).orElseThrow(() -> ex);
 
-        StoredSubmission stored = submissions.compute(
-                key, (k, existing) -> {
-                    if (existing != null){
-                        if(!existing.request().equals(request)){
-                            throw new ResponseStatusException(HttpStatus.CONFLICT, "Request key already used with different data");
-                        }
-                        return existing;
-                    }
-                    created.set(true);
-
-                    LoanSubmissionResponse response =
-                            new LoanSubmissionResponse(
-                                    "LOAN-" +UUID.randomUUID(), "Submitted", Instant.now()
-                            );
-                    return new StoredSubmission(request, response);
-                }
-        );
-        return new SubmissionResult(stored.response(), created.get());
+            return checkRetry(saved, request);
+        }
     }
-    private record RequestKey(String customerId, String key){}
-    private record StoredSubmission(LoanSubmissionRequest request, LoanSubmissionResponse response){}
+
+       private SubmissionResult checkRetry(LoanApplication saved, LoanSubmissionRequest request){
+
+          boolean same =
+                  saved.getLoanAmount().compareTo(request.amount()) == 0
+                  && saved.getTermMonths().equals(request.termMonths())
+                  && saved.getPurpose().equals(request.purpose())
+                  && saved.getEmploymentStatus().name().equals(request.employmentStatus())
+                  && saved.getMonthlyIncome().compareTo(request.monthlyIncome())== 0;
+
+          if (!same){
+              throw new ResponseStatusException(HttpStatus.CONFLICT, "Request key already used with different data");
+          }
+
+        return new SubmissionResult(toResponse(saved), false);
+    }
+    private LoanSubmissionResponse toResponse(LoanApplication loan){
+        return new LoanSubmissionResponse(loan.getReference(),"SUBMITTED", loan.getSubmittedAt());
+    }
+
     public record SubmissionResult(LoanSubmissionResponse response, boolean created){}
 }
 
-//UUID gives unique reference
-//Instant.now() captures submission time
-//ConcurrentHashMap.compute() ensures that simultaneous request from same customer and request key don't create multiple entries.
