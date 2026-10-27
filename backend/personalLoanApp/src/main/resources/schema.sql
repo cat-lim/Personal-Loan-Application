@@ -43,5 +43,13 @@ CREATE TABLE loan_application (
     decided_by_officer_id BIGINT,
     CONSTRAINT fk_loan_customer FOREIGN KEY (customer_id) REFERENCES customer (id),
     CONSTRAINT fk_loan_decided_by_officer FOREIGN KEY (decided_by_officer_id) REFERENCES loan_officer (id),
-    CONSTRAINT uk_loan_customer_request_key UNIQUE (customer_id, request_key)
+    CONSTRAINT uk_loan_customer_request_key UNIQUE (customer_id, request_key),
+    -- Pending rows have no decision fields; decided rows have all of them, and a rejection has a reason
+    CONSTRAINT ck_loan_decision_consistent CHECK (
+        (status = 'SUBMITTED' AND decided_at IS NULL
+            AND decided_by_officer_id IS NULL AND decision_note IS NULL)
+        OR (status IN ('APPROVED', 'REJECTED') AND decided_at IS NOT NULL
+            AND decided_by_officer_id IS NOT NULL
+            AND (status <> 'REJECTED' OR NULLIF(BTRIM(decision_note), '') IS NOT NULL))
+    )
 );
