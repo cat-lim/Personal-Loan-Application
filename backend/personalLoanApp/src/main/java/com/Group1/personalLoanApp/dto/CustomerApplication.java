@@ -19,6 +19,10 @@ public record CustomerApplication(
         String decisionNote,
         Instant decidedAt
 ) {
+    /**
+     * @param application: LoanApplication
+     * @return a CustomerApplication created by copying the fields of the parameter application
+     */
     public static CustomerApplication from(LoanApplication application) {
         return new CustomerApplication(
                 application.getId(),
