@@ -69,7 +69,7 @@ public class SecurityConfig {
                 .securityContext(context ->
                         context.securityContextRepository(repository)).authorizeHttpRequests(auth ->
                         auth.requestMatchers(
-                                HttpMethod.GET, "api/auth/csrf").permitAll()
+                                HttpMethod.GET, "/api/auth/csrf").permitAll()
                                 .requestMatchers("/api/auth/me", "/api/auth/logout")
                                 .authenticated()
                                 .requestMatchers(
@@ -87,9 +87,9 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(List.of("http//localhost:4200"));
+        config.setAllowedOrigins(List.of("http://localhost:4200"));
         config.setAllowedMethods(List.of("GET","POST", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Content-Type", "Idempotency=key", "X-CSRF-TOKEN"));
+        config.setAllowedHeaders(List.of("Content-Type", "Idempotency-key", "X-CSRF-TOKEN"));
         config.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/**", config);
