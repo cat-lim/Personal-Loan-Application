@@ -1,4 +1,29 @@
+<<<<<<< HEAD
 import {Injectable} from '@angular/core';
+=======
+import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
+import {inject, Injectable} from '@angular/core';
+import {Observable, switchMap, timeout} from 'rxjs';
+import {AuthService} from '../authservice/authservice';
+
+import {LoanApplication} from '../models/loan.model';
+
+export type EmploymentStatus = 'EMPLOYED' | 'SELF_EMPLOYED' | 'RETIRED' | 'OTHER';
+
+export interface LoanSubmissionRequest {
+  amount: number;
+  termMonths: number;
+  purpose: string;
+  employmentStatus: EmploymentStatus;
+  monthlyIncome: number;
+}
+
+export interface LoanSubmissionResponse {
+  reference: string;
+  status: string;
+  submittedAt: string;
+}
+>>>>>>> 6c1e39a (Save T02)
 
 @Injectable({
   providedIn: 'root',

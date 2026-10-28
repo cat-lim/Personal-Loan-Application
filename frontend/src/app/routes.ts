@@ -5,6 +5,11 @@ import {Home} from './home/home';
 import {Login} from './login/login';
 import {LoanApplication} from './loanapply/loanapply';
 import {AuthService} from './authservice/authservice';
+<<<<<<< HEAD
+=======
+import {CustomerHome} from './customer/customer-home';
+import { CustomerDetailComponent } from './customer/customer-detail';
+>>>>>>> 6c1e39a (Save T02)
 
 const customerAuthGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
@@ -37,5 +42,12 @@ const routeConfig: Routes = [
     path: '**',
     redirectTo: '',
   },
+
+   {
+      path: 'customer/applications/:id',
+      component: CustomerDetailComponent,
+      canActivate: [customerAuthGuard],
+      title: 'Customer Application Details'
+    }
 ];
 export default routeConfig;

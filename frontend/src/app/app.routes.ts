@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-
 import { OfficerQueueComponent } from './officer/officer-home/officer-home';
 import { OfficerReviewComponent} from './officer/offcer-review/offcer-review';
 import { Home } from './home/home';
@@ -17,4 +16,6 @@ export const routes: Routes = [
         path: 'officer/applications/:id',
         component: OfficerReviewComponent
     }
+
+   
 ];
