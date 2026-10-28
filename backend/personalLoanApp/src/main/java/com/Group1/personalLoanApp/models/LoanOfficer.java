@@ -41,4 +41,5 @@ public class LoanOfficer {
     public String getUsername() { return username; }
     public String getPasswordHash() { return passwordHash; }
     public String getFullName() { return fullName; }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
 }
