@@ -41,10 +41,10 @@ The SQL verification scripts check the equivalent database behavior. They are no
 
 ## 2. Required Files
 
-- `01-verify-baseline.sql`
-- `02-empty-pending-queue.sql`
-- `03-customer-without-applications.sql`
-- `04-index-check.sql`
+- `verify_baseline.sql`
+- `pending_queue.sql`
+- `no_applications.sql`
+- `index_check.sql`
 
 Database initialization files:
 
