@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-import {Injectable} from '@angular/core';
-=======
 import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {inject, Injectable} from '@angular/core';
 import {Observable, switchMap, timeout} from 'rxjs';
@@ -23,7 +20,6 @@ export interface LoanSubmissionResponse {
   status: string;
   submittedAt: string;
 }
->>>>>>> 6c1e39a (Save T02)
 
 @Injectable({
   providedIn: 'root',
