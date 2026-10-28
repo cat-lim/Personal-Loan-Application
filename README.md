@@ -201,8 +201,12 @@ customer 1 ──── * loan_application * ──── 0..1 loan_officer
     - `loan_officer.username`
     - (`loan_application.customer_id`, `loan_application.request_key`)
 - **NOT NULL:** every column marked *Required* above.
-- **Business rules** (amount range, allowed terms, note required on rejection) are not yet
-  enforced. They will be added during server-side development.
+- **Check** `ck_loan_decision_consistent` on `loan_application`:
+    - `SUBMITTED` rows have no `decided_at`, `decided_by_officer_id` or `decision_note`.
+    - `APPROVED` and `REJECTED` rows have both `decided_at` and `decided_by_officer_id`.
+    - `REJECTED` rows have a non-blank `decision_note`.
+- **Other business rules** (amount range, allowed terms) are checked in the backend by
+  `LoanApplicationValidator`.
 ---
 
 ## Changing the schema
@@ -214,6 +218,95 @@ a field in a model:
 2. Update `seed-data.json` (and `DataSeeder.java`) if the field should have sample data.
 3. Update the field dictionary in this README.
 4. Restart the app and re-run the verify query.
+---
+
+## Recording a decision
+
+An officer's approve or reject is saved by
+`LoanApplicationRepository.decideIfSubmitted`. It is a single conditional
+`UPDATE`, so the status, note, officer and timestamp are written together, and
+only if the application is still `SUBMITTED`. Two officers can never both
+decide the same application, and a later decision never overwrites an earlier one.
+
+### Service contract
+
+```java
+int decideIfSubmitted(Long applicationId, String decision, String decisionNote,
+                      Long officerId, Instant decidedAt)
+```
+
+| Parameter       | Value |
+|-----------------|-------|
+| `applicationId` | The application's `id` (1001 for LN-1001) |
+| `decision`      | `"APPROVED"` or `"REJECTED"` (use `ApplicationStatus.name()`) |
+| `decisionNote`  | Optional when approving. Required and non-blank when rejecting. Max 1000 characters |
+| `officerId`     | `id` of the logged-in officer |
+| `decidedAt`     | `Instant.now()` on the server; never taken from the client |
+
+**Returns** the number of rows changed:
+
+- `1`: the decision was recorded.
+- `0`: nothing was changed. The application doesn't exist, it was already
+  decided, or the arguments broke one of the rules above.
+
+The service that calls it should:
+
+1. Run `LoanApplicationValidator.validateDecision(...)` and return **400** with the
+   errors if there are any.
+2. Call `decideIfSubmitted(...)`.
+3. On `1`, reload the application with `findById` and return **200**.
+4. On `0`, call `findById`. If it is empty, return **404**. Otherwise another
+   officer decided first: return **409 Conflict** with the current application,
+   so the officer sees the decision that was kept.
+
+The validator is an early check that gives readable error messages. The
+conditional `UPDATE` is what actually prevents a conflict, because the
+application can change between the check and the update.
+
+### Success and conflict scenario
+
+LN-1001 is `SUBMITTED`. Officers A and B both open it from the pending queue.
+
+| Step | Action | Result |
+|------|--------|--------|
+| 1 | A approves LN-1001 | `UPDATE` matches the `SUBMITTED` row and returns `1`. LN-1001 is now `APPROVED` by A |
+| 2 | B rejects LN-1001 with "Income too low" | The row is no longer `SUBMITTED`, so the `UPDATE` returns `0`. The service returns 409 |
+| 3 | Anyone reads LN-1001 | Still `APPROVED` by A, with A's timestamp. B's note was never saved |
+| 4 | Load the pending queue | LN-1001 is gone, because `findByStatusOrderBySubmittedAtAscIdAsc(SUBMITTED)` only returns `SUBMITTED` rows |
+
+If both clicks arrive at the same moment, PostgreSQL locks the row for the
+first `UPDATE`. The second waits until the first commits, then checks
+`status = 'SUBMITTED'` again against the committed row, finds it no longer
+matches, and changes 0 rows.
+
+You can watch this happen with two `psql` windows connected to the database:
+
+```sql
+-- Window A
+BEGIN;
+UPDATE loan_application
+   SET status = 'APPROVED', decided_by_officer_id = 1, decided_at = now()
+ WHERE id = 1001 AND status = 'SUBMITTED';
+-- UPDATE 1   (do not commit yet)
+
+-- Window B: this waits, because A holds the row
+UPDATE loan_application
+   SET status = 'REJECTED', decision_note = 'Income too low',
+       decided_by_officer_id = 1, decided_at = now()
+ WHERE id = 1001 AND status = 'SUBMITTED';
+
+-- Window A
+COMMIT;
+
+-- Window B now finishes with: UPDATE 0
+
+SELECT id, status, decision_note, decided_at FROM loan_application WHERE id = 1001;
+-- APPROVED, no note: A's decision was kept
+```
+
+Restart the app afterwards to put LN-1001 back to `SUBMITTED` (see
+[Reset to a clean seeded state](#reset-to-a-clean-seeded-state)).
+
 ---
 
 ## Troubleshooting
@@ -228,3 +321,4 @@ a field in a model:
 | Tables exist but are empty | Spring didn't find `DataSeeder` | The `seed` folder must be inside `com/Group1/personalLoanApp/` |
 | `required a bean of type 'com.fasterxml.jackson.databind.ObjectMapper'` | Jackson not available, or Spring Boot 4 (Jackson 3) | Boot 4: import `tools.jackson.databind.ObjectMapper` in `DataSeeder`. Boot 3: add `spring-boot-starter-json` or `spring-boot-starter-web` to `pom.xml` |
 | `Cannot deserialize value of type EmploymentStatus` | Typo in `seed-data.json` | Use exactly `EMPLOYED`, `SELF_EMPLOYED`, `RETIRED` or `OTHER` |
+| `violates check constraint "ck_loan_decision_consistent"` | A row's decision fields don't match its status | `SUBMITTED` rows need no decision fields; decided rows need `decidedAt` and `decidedByUsername`; `REJECTED` rows need a `decisionNote` |

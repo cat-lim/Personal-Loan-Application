@@ -1,0 +1,68 @@
+<h2>Pending Applications</h2>
+
+<div *ngIf="loading">
+  Loading...
+</div>
+
+<div *ngIf="errorMessage">
+  {{ errorMessage }}
+</div>
+
+<div *ngIf="!loading && !errorMessage && applications.length === 0">
+  No pending applications.
+</div>
+
+<div
+  *ngIf="successMessage"
+  style="
+    color: green;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid green;
+    background-color: #f0fff0;
+  ">
+  {{ successMessage }}
+</div>
+
+<table *ngIf="applications.length > 0">
+
+  <thead>
+    <tr>
+      <th>Reference</th>
+      <th>Applicant</th>
+      <th>Amount</th>
+      <th>Term</th>
+      <th>Status</th>
+      <th>Submitted</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    <tr *ngFor="let app of applications">
+
+      <td>{{ app.reference }}</td>
+
+      <td>{{ app.applicantName }}</td>
+
+      <td>{{ app.loanAmount | currency }}</td>
+
+      <td>{{ app.termMonths }} months</td>
+
+      <td>{{ app.status }}</td>
+
+      <td>{{ app.submittedAt | date:'short' }}</td>
+
+      <td>
+        <button
+          [routerLink]="['/officer/applications', app.id]">
+          Review
+        </button>
+      </td>
+
+    </tr>
+
+  </tbody>
+
+</table>
