@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 
-import { OfficerQueueItem } from '../models/officer-queue.model';
-import { LoanApplication } from '../models/loan-application.model';
 import { OfficerApplication } from '../models/officer-application.model';
 
 @Injectable({
