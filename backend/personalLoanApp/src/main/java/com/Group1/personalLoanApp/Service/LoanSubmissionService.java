@@ -47,7 +47,7 @@ public class LoanSubmissionService {
                   saved.getLoanAmount().compareTo(request.amount()) == 0
                   && saved.getTermMonths().equals(request.termMonths())
                   && saved.getPurpose().equals(request.purpose())
-                  && saved.getEmploymentStatus().name().equals(request.employmentStatus())
+                  && saved.getEmploymentStatus() == request.employmentStatus()
                   && saved.getMonthlyIncome().compareTo(request.monthlyIncome())== 0;
 
           if (!same){
