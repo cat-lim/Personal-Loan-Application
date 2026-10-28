@@ -20,7 +20,7 @@ public record LoanSubmissionRequest (
         @Size(max = 200)
         String purpose,
 
-        @NotBlank(message = "Employment status required")
+        @NotNull(message = "Employment status required")
         LoanApplication.EmploymentStatus employmentStatus,
 
         @NotNull

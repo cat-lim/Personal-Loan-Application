@@ -1,4 +1,4 @@
-package com.Group1.personalLoanApp.Service;
+package com.Group1.personalLoanApp.service;
 import com.Group1.personalLoanApp.dto.LoanSubmissionRequest;
 import com.Group1.personalLoanApp.dto.LoanSubmissionResponse;
 import com.Group1.personalLoanApp.models.LoanApplication;
