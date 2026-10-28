@@ -1,0 +1,55 @@
+<div class="application-list">
+
+  <h2>My Applications</h2>
+
+  <div *ngIf="loading">
+    Loading applications...
+  </div>
+
+  <table *ngIf="!loading">
+
+    <thead>
+      <tr>
+        <th>Reference</th>
+        <th>Amount</th>
+        <th>Term</th>
+        <th>Submitted</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let app of applications">
+
+        <td>{{ app.referenceNumber }}</td>
+
+        <td>
+          {{ app.amount | currency }}
+        </td>
+
+        <td>
+          {{ app.termMonths }} Months
+        </td>
+
+        <td>
+          {{ app.submittedDate | date }}
+        </td>
+
+        <td>
+          {{ app.status }}
+        </td>
+
+        <td>
+          <button
+            (click)="viewDetails(app.applicationId)">
+            View
+          </button>
+        </td>
+
+      </tr>
+    </tbody>
+
+  </table>
+
+</div>

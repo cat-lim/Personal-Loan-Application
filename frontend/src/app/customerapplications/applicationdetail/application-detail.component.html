@@ -1,0 +1,70 @@
+<div class="application-detail" *ngIf="application">
+
+  <h2>Application Details</h2>
+
+  <div class="card">
+
+    <p>
+      <strong>Reference:</strong>
+      {{ application.referenceNumber }}
+    </p>
+
+    <p>
+      <strong>Applicant:</strong>
+      {{ application.applicantName }}
+    </p>
+
+    <p>
+      <strong>Amount:</strong>
+      {{ application.amount | currency }}
+    </p>
+
+    <p>
+      <strong>Term:</strong>
+      {{ application.termMonths }} Months
+    </p>
+
+    <p>
+      <strong>Status:</strong>
+      {{ application.status }}
+    </p>
+
+    <p>
+      <strong>Submitted:</strong>
+      {{ application.submittedDate | date }}
+    </p>
+
+  </div>
+
+  <div
+    class="decision-card"
+    *ngIf="decision">
+
+    <h3>Decision</h3>
+
+    <p>
+      <strong>Outcome:</strong>
+      {{ decision.outcome }}
+    </p>
+
+    <p>
+      <strong>Date:</strong>
+      {{ decision.decisionDate | date }}
+    </p>
+
+    <div>
+
+      <h4>Reason Codes</h4>
+
+      <ul>
+        <li
+          *ngFor="let code of decision.reasonCodes">
+          {{ code }}
+        </li>
+      </ul>
+
+    </div>
+
+  </div>
+
+</div>
