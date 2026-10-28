@@ -10,9 +10,16 @@ BEGIN;
 -- This is a test only, not a real approval workflow.
 
 UPDATE loan_application
-SET status = 'APPROVED'
+SET
+    status = 'APPROVED',
+    decided_at = CURRENT_TIMESTAMP,
+    decided_by_officer_id = (
+        SELECT id
+        FROM loan_officer
+        WHERE username = 'jordan.lee'
+    ),
+    decision_note = NULL
 WHERE status = 'SUBMITTED';
-
 
 -- Check the pending queue.
 -- Expected: zero rows.
