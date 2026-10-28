@@ -1,11 +1,15 @@
-import { Component } from '@angular/core';
-import { LoanApplication } from '../loanapply/loanapply';
+import {Component} from '@angular/core';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-home',
-  imports: [LoanApplication],
+  imports: [RouterLink],
   template: `
-    <app-loanapplication />
+    <section>
+      <h1>Northstar Personal Loans</h1>
+      <p>Sign in to submit a personal loan application.</p>
+      <a routerLink="/login">Customer login</a>
+    </section>
   `,
   styleUrls: ['./home.css'],
 })
