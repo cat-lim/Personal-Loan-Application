@@ -62,7 +62,7 @@ export class Login {
           this.loginError = 'Sign in with a customer account to apply.';
           return;
         }
-        void this.router.navigate(['/apply']);
+        void this.router.navigate(['/customer/home']);
       },
       error: (error: unknown) => {
         this.loggingIn = false;
