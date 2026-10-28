@@ -89,8 +89,8 @@ import {Router} from '@angular/router';
             <p class="form-error" role="alert">{{ submissionError }}</p>
           }
 
-          <button type="submit" [disabled]="submissionPending">
-            {{ submissionPending ? 'Submitting...' : 'Submit Application' }}
+          <button type="submit" [disabled]="submissionPending || applicationSubmitted">
+            {{ submissionPending ? 'Submitting...' : applicationSubmitted ? 'Application submitted' : 'Submit Application' }}
           </button>
         </form>
       </section>
@@ -118,6 +118,7 @@ export class LoanApplication {
   });
   submitted = false;
   submissionPending = false;
+  applicationSubmitted = false;
   submissionError = '';
 
   showControlError(control: FormControl): boolean {
@@ -128,7 +129,7 @@ export class LoanApplication {
     this.submitted = true;
     this.applyForm.markAllAsTouched();
 
-    if (this.applyForm.invalid) {
+    if (this.applyForm.invalid || this.submissionPending || this.applicationSubmitted) {
       return;
     }
 
@@ -146,6 +147,7 @@ export class LoanApplication {
     })).subscribe({
       next: (response) => {
         this.submissionPending = false;
+        this.applicationSubmitted = true;
         void this.router.navigate(['/customer/home'], {
           state: {applicationReference: response.reference},
         });
