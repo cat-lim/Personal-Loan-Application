@@ -9,7 +9,7 @@ import { CustomerApplicationService } from '../services/customer-application.ser
   templateUrl: './application-list.component.html',
   styleUrls: ['./application-list.component.scss']
 })
-export class ApplicationListComponent implements OnInit {
+export class CustomerApplication implements OnInit {
 
   applications: ApplicationSummary[] = [];
   loading = false;
