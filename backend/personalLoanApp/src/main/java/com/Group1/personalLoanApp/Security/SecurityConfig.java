@@ -70,10 +70,12 @@ public class SecurityConfig {
                         context.securityContextRepository(repository)).authorizeHttpRequests(auth ->
                         auth.requestMatchers(
                                 HttpMethod.GET, "/api/auth/csrf").permitAll()
-                                .requestMatchers("/api/auth/me", "/api/auth/logout")
-                                .authenticated()
+                                .requestMatchers("/api/auth/me", "/api/auth/logout").authenticated()
                                 .requestMatchers(
-                                        HttpMethod.POST, "/api/loans/submit").hasRole("CUSTOMER").anyRequest().permitAll()
+                                        HttpMethod.POST, "/api/loans/submit").hasRole("CUSTOMER")
+                                .requestMatchers("/api/applications/**").hasRole("CUSTOMER") //Customer RBAC
+                                .requestMatchers("/api/officer/applications/**").hasRole("OFFICER") //Officer RBAC
+                                .anyRequest().permitAll()
                                 )
                                 .exceptionHandling(errors ->
                                         errors.authenticationEntryPoint(
@@ -89,7 +91,7 @@ public class SecurityConfig {
 
         config.setAllowedOrigins(List.of("http://localhost:4200"));
         config.setAllowedMethods(List.of("GET","POST", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Content-Type", "Idempotency-key", "X-CSRF-TOKEN"));
+        config.setAllowedHeaders(List.of("Content-Type", "Idempotency-Key", "X-CSRF-TOKEN"));
         config.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/**", config);
