@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {Component} from '@angular/core';
+import {RouterOutlet, RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  template: `
+  imports: [RouterOutlet, RouterLink],
+  template: ` 
     <main>
+      <a [routerLink]="'/'">Home</a>
       <header class="brand-name">
         <img
           class="brand-logo"
