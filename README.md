@@ -13,7 +13,6 @@ Implement and verify the database queries and supporting indexes for customer lo
 - `customer-queries.sql` — Customer-scoped application history and details
 - `officer-queue.sql` — Pending applications with applicant information
 - `repository-indexes.sql` — Customer history and pending queue indexes
-- `test-scenarios.sql` — Repeatable database test cases
 
 ## Repository contracts
 The existing `LoanApplicationRepository` exposes:
@@ -32,7 +31,6 @@ The officer queue uses `ApplicationStatus.SUBMITTED`.
 4. Execute the index creation script.
 5. Run the test scenarios using transactions.
 6. Verify the returned records and ordering.
-7. Use `ROLLBACK` to undo temporary test changes.
 
 ## Expected results
 - Customer history is restricted to the requested customer.
@@ -43,10 +41,4 @@ The officer queue uses `ApplicationStatus.SUBMITTED`.
 
 ## Integration notes
 The original Java repository methods remain unchanged.
-
 The new indexes must be included in the shared database initialization or migration process for other environments.
-
-SQL verification does not replace Java repository integration testing.
-
-## Verification status
-Not yet executed locally. Record test dates, actual results, and any issues here after testing.
