@@ -26,14 +26,13 @@ export class OfficerQueueComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const navigation =
-      this.router.getCurrentNavigation();
 
-    this.successMessage =
-      navigation?.extras.state?.[
-        'successMessage'
-      ] ?? '';
+    const state = history.state;
 
+    if (state && state.successMessage) {
+      this.successMessage = state.successMessage;
+    }
+    console.log(history.state);
     this.loadQueue();
   }
 

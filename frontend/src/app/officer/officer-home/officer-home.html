@@ -14,10 +14,14 @@
 
 <div
   *ngIf="successMessage"
-  style="color:green">
-
+  style="
+    color: green;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid green;
+    background-color: #f0fff0;
+  ">
   {{ successMessage }}
-
 </div>
 
 <table *ngIf="applications.length > 0">
