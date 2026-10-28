@@ -1,4 +1,4 @@
-package com.Group1.personalLoanApp.Service;
+package com.Group1.personalLoanApp.service;
 
 import com.Group1.personalLoanApp.dto.LoanSubmissionRequest;
 import com.Group1.personalLoanApp.models.LoanApplication;
@@ -33,8 +33,8 @@ public class LoanSubmissionWrite {
         loan.setLoanAmount(request.amount());
         loan.setTermMonths(request.termMonths());
         loan.setPurpose(request.purpose());
-
-        loan.setEmploymentStatus(LoanApplication.EmploymentStatus.valueOf(request.employmentStatus()));
+        loan.setEmploymentStatus(request.employmentStatus());
+        loan.setMonthlyIncome(request.monthlyIncome());
 
         return loans.saveAndFlush(loan);
     }

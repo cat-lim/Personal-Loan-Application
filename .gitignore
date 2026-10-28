@@ -5,3 +5,8 @@ frontend/dist/
 .env
 .env.*
 !.env.example
+
+.idea
+.idea/*
+
+.ai
