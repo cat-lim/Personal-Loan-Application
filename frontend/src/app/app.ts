@@ -8,17 +8,19 @@ import {RouterOutlet, RouterLink} from '@angular/router';
     <main>
       <a [routerLink]="'/'">Home</a>
       <header class="brand-name">
-        <img class="brand-logo" src="/public/logo.svg" alt="logo" aria-hidden="true" />
+        <img
+          class="brand-logo"
+          src="/public/logo.svg"
+          alt="logo"
+          aria-hidden="true"
+        />
       </header>
+
       <section class="content">
         <router-outlet />
       </section>
     </main>
   `,
-                
-  styleUrls: ['./app.css'],
+  styleUrls: ['./app.css']
 })
-export class App {
-  title = 'Northstar Bank';
-}
-
+export class App {}
