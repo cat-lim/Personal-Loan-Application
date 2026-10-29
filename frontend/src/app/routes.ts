@@ -39,9 +39,16 @@ const routeConfig: Routes = [
     title: 'Loan application',
   },
   {
+    path: 'customer/applications/:id',
+    component: CustomerDetailComponent,
+    canActivate: [customerAuthGuard],
+    title: 'Customer application details',
+  },
+  {
     path: '**',
     redirectTo: '',
   },
+<<<<<<< HEAD
 
    {
       path: 'customer/applications/:id',
@@ -61,5 +68,7 @@ const routeConfig: Routes = [
       canActivate: [OfficerAuthGuard],
       title: 'Officer Dashboard'
     }
+=======
+>>>>>>> ee6e1ce53bb1049a7ece5d04fc9d1282b86c329c
 ];
 export default routeConfig;
