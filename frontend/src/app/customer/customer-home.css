@@ -29,10 +29,6 @@
   font: inherit;
 }
 
-.primary-button {
-  font-weight: 600;
-}
-
 .primary-button:hover {
   background: var(--secondary-color);
   border-color: var(--secondary-color);
