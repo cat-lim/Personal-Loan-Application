@@ -18,9 +18,11 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.web.cors.*;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 
 
 @Configuration
+@EnableMethodSecurity 
 public class SecurityConfig {
     @Bean
     PasswordEncoder passwordEncoder(){
@@ -66,14 +68,19 @@ public class SecurityConfig {
         http
                 .cors(cors ->{})
                 .csrf(csrf -> csrf.csrfTokenRepository(new HttpSessionCsrfTokenRepository()))
+                // .csrf(AbstractHttpConfigurer::disable)
                 .securityContext(context ->
                         context.securityContextRepository(repository)).authorizeHttpRequests(auth ->
                         auth.requestMatchers(
                                 HttpMethod.GET, "/api/auth/csrf").permitAll()
-                                .requestMatchers("/api/auth/me", "/api/auth/logout")
-                                .authenticated()
+                                .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                                .requestMatchers("/api/auth/me", "/api/auth/logout").authenticated()
                                 .requestMatchers(
-                                        HttpMethod.POST, "/api/loans/submit").hasRole("CUSTOMER").anyRequest().permitAll()
+                                        HttpMethod.POST, "/api/loans/submit").hasRole("CUSTOMER")
+                                .requestMatchers("/api/applications/**").hasRole("CUSTOMER") //Customer RBAC
+                                // .requestMatchers("/api/officer/applications/**").hasRole("OFFICER") //Officer RBAC
+                                .requestMatchers("/api/officer/applications/**").permitAll()
+                                .anyRequest().permitAll()
                                 )
                                 .exceptionHandling(errors ->
                                         errors.authenticationEntryPoint(
@@ -89,7 +96,7 @@ public class SecurityConfig {
 
         config.setAllowedOrigins(List.of("http://localhost:4200"));
         config.setAllowedMethods(List.of("GET","POST", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Content-Type", "Idempotency-key", "X-CSRF-TOKEN"));
+        config.setAllowedHeaders(List.of("Content-Type", "Idempotency-Key", "X-CSRF-TOKEN"));
         config.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/**", config);

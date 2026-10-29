@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/loans")
 
@@ -39,8 +41,15 @@ public class LoanSubmissionController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request key required");
         }
 
-        String customerId = session.getAttribute("userId").toString();
-        var result = service.submit(customerId, requestKey, request);
+        UUID idempotencyKey;
+        try {
+            idempotencyKey = UUID.fromString(requestKey);
+        } catch (IllegalArgumentException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request key must be a valid UUID");
+        }
+
+        Long customerId = (Long) session.getAttribute("userId");
+        var result = service.submit(customerId, idempotencyKey, request);
 
         HttpStatus status = result.created()
                 ? HttpStatus.CREATED

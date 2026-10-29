@@ -18,7 +18,7 @@ interface CsrfTokenResponse {
 })
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8080/api/auth';
+  private readonly apiUrl = 'http://localhost:8081/api/auth';
 
   getCurrentUser(): Observable<AuthResponse> {
     return this.http.get<AuthResponse>(`${this.apiUrl}/me`, {

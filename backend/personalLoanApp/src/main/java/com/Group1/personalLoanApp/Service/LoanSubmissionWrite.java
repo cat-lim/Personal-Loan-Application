@@ -33,8 +33,8 @@ public class LoanSubmissionWrite {
         loan.setLoanAmount(request.amount());
         loan.setTermMonths(request.termMonths());
         loan.setPurpose(request.purpose());
-
-        loan.setEmploymentStatus(LoanApplication.EmploymentStatus.valueOf(request.employmentStatus()));
+        loan.setEmploymentStatus(request.employmentStatus());
+        loan.setMonthlyIncome(request.monthlyIncome());
 
         return loans.saveAndFlush(loan);
     }

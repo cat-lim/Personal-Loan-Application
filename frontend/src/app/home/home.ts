@@ -8,7 +8,8 @@ import {RouterLink} from '@angular/router';
     <section>
       <h1>Northstar Personal Loans</h1>
       <p>Sign in to submit a personal loan application.</p>
-      <a routerLink="/login">Customer login</a>
+      <a routerLink="/login">Customer login</a><br>
+      <a routerLink="/officer-login">Officer login</a>
     </section>
   `,
   styleUrls: ['./home.css'],

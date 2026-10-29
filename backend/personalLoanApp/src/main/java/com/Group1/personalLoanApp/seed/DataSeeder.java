@@ -10,6 +10,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,6 @@ import java.util.UUID;
  * Loads fictional data from src/main/resources/seed/seed-data.json when the app starts.
  * Does nothing if the customer table already has rows.
  *
- * TODO (server-side step): hash passwords with BCrypt. For now they are stored as-is.
  */
 @Component
 public class DataSeeder implements CommandLineRunner {
@@ -45,9 +45,11 @@ public class DataSeeder implements CommandLineRunner {
     private EntityManager em;
 
     private final ObjectMapper objectMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public DataSeeder(ObjectMapper objectMapper) {
+    public DataSeeder(ObjectMapper objectMapper, PasswordEncoder passwordEncoder) {
         this.objectMapper = objectMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -63,14 +65,16 @@ public class DataSeeder implements CommandLineRunner {
 
         Map<String, Customer> customers = new HashMap<>();
         for (UserSeed u : data.customers()) {
-            Customer c = new Customer(u.username(), u.password(), u.fullName());
+            Customer c = new Customer(
+                    u.username(), passwordEncoder.encode(u.password()), u.fullName());
             em.persist(c);
             customers.put(c.getUsername(), c);
         }
 
         Map<String, LoanOfficer> officers = new HashMap<>();
         for (UserSeed u : data.officers()) {
-            LoanOfficer o = new LoanOfficer(u.username(), u.password(), u.fullName());
+            LoanOfficer o = new LoanOfficer(
+                    u.username(), passwordEncoder.encode(u.password()), u.fullName());
             em.persist(o);
             officers.put(o.getUsername(), o);
         }

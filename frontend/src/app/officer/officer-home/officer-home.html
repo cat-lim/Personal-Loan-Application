@@ -4,27 +4,22 @@
   Loading...
 </div>
 
-<div *ngIf="errorMessage">
+<div *ngIf="errorMessage" style="color:red">
   {{ errorMessage }}
 </div>
 
-<div *ngIf="!loading && !errorMessage && applications.length === 0">
-  No pending applications.
-</div>
-
-<div
-  *ngIf="successMessage"
-  style="
-    color: green;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid green;
-    background-color: #f0fff0;
-  ">
+<div *ngIf="successMessage" style="color:green">
   {{ successMessage }}
 </div>
 
-<table *ngIf="applications.length > 0">
+<div *ngIf="!loading && applications.length === 0">
+  No pending applications.
+</div>
+
+<table
+  *ngIf="!loading && applications.length > 0"
+  border="1"
+  cellpadding="8">
 
   <thead>
     <tr>
@@ -32,14 +27,13 @@
       <th>Applicant</th>
       <th>Amount</th>
       <th>Term</th>
+      <th>Purpose</th>
       <th>Status</th>
-      <th>Submitted</th>
-      <th></th>
+      <th>Review</th>
     </tr>
   </thead>
 
   <tbody>
-
     <tr *ngFor="let app of applications">
 
       <td>{{ app.reference }}</td>
@@ -48,11 +42,11 @@
 
       <td>{{ app.loanAmount | currency }}</td>
 
-      <td>{{ app.termMonths }} months</td>
+      <td>{{ app.termMonths }}</td>
+
+      <td>{{ app.purpose }}</td>
 
       <td>{{ app.status }}</td>
-
-      <td>{{ app.submittedAt | date:'short' }}</td>
 
       <td>
         <button
@@ -62,7 +56,6 @@
       </td>
 
     </tr>
-
   </tbody>
 
 </table>
