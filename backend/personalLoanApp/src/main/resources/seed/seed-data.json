@@ -6,7 +6,8 @@
 
   ],
   "officers": [
-    { "username": "jordan.lee", "password": "password123", "fullName": "Jordan Lee" }
+    { "username": "jordan.lee", "password": "password123", "fullName": "Jordan Lee" },
+    { "username": "crimson.king", "password":  "password123", "fullName":  "Crimson King" }
   ],
   "applications": [
     {
