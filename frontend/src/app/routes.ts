@@ -8,6 +8,8 @@ import {AuthService} from './authservice/authservice';
 import {OfficerQueueComponent} from './officer/officer-home/officer-home';
 import {OfficerReviewComponent} from './officer/officer-review/officer-review';
 import { OfficerLogin } from './officer/officer-login/officer-login';
+import {CustomerHome} from './customer/customer-home';
+import { CustomerDetailComponent } from './customer/customer-detail';
 
 const customerAuthGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
@@ -36,6 +38,12 @@ const routeConfig: Routes = [
     title: 'Officer login',
   },
   {
+    path: 'customer/home',
+    component: CustomerHome,
+    canActivate: [customerAuthGuard],
+    title: 'My loan applications',
+  },
+  {
     path: 'apply',
     component: LoanApplication,
     canActivate: [customerAuthGuard],
@@ -50,6 +58,12 @@ const routeConfig: Routes = [
     path: 'officer/applications/:id',
     component: OfficerReviewComponent,
     title: 'Review loan application',
+  },
+  {
+    path: 'customer/applications/:id',
+    component: CustomerDetailComponent,
+    canActivate: [customerAuthGuard],
+    title: 'Customer application details',
   },
   {
     path: '**',

@@ -26,6 +26,10 @@ import java.util.UUID;
  * Loads fictional data from src/main/resources/seed/seed-data.json when the app starts.
  * Does nothing if the customer table already has rows.
  *
+<<<<<<< HEAD
+=======
+ * Seed passwords are BCrypt-hashed. Existing plain-text seed records are upgraded in place.
+>>>>>>> origin/main
  */
 @Component
 public class DataSeeder implements CommandLineRunner {
@@ -55,26 +59,27 @@ public class DataSeeder implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-        Long existing = em.createQuery("select count(c) from Customer c", Long.class).getSingleResult();
-        if (existing > 0) return;
-
         SeedData data;
         try (InputStream in = new ClassPathResource("seed/seed-data.json").getInputStream()) {
             data = objectMapper.readValue(in, SeedData.class);
         }
 
+        Long existing = em.createQuery("select count(c) from Customer c", Long.class).getSingleResult();
+        if (existing > 0) {
+            upgradeLegacyPasswordHashes(data);
+            return;
+        }
+
         Map<String, Customer> customers = new HashMap<>();
         for (UserSeed u : data.customers()) {
-            Customer c = new Customer(
-                    u.username(), passwordEncoder.encode(u.password()), u.fullName());
+            Customer c = new Customer(u.username(), passwordEncoder.encode(u.password()), u.fullName());
             em.persist(c);
             customers.put(c.getUsername(), c);
         }
 
         Map<String, LoanOfficer> officers = new HashMap<>();
         for (UserSeed u : data.officers()) {
-            LoanOfficer o = new LoanOfficer(
-                    u.username(), passwordEncoder.encode(u.password()), u.fullName());
+            LoanOfficer o = new LoanOfficer(u.username(), passwordEncoder.encode(u.password()), u.fullName());
             em.persist(o);
             officers.put(o.getUsername(), o);
         }
@@ -95,6 +100,30 @@ public class DataSeeder implements CommandLineRunner {
             loan.setDecidedAt(a.decidedAt());
             loan.setDecidedBy(a.decidedByUsername() == null ? null : officers.get(a.decidedByUsername()));
             em.persist(loan);
+        }
+    }
+
+    private void upgradeLegacyPasswordHashes(SeedData data) {
+        for (UserSeed seed : data.customers()) {
+            em.createQuery("select c from Customer c where c.username = :username", Customer.class)
+                    .setParameter("username", seed.username())
+                    .getResultStream()
+                    .findFirst()
+                    .ifPresent(customer -> upgradePasswordHash(customer::setPasswordHash, customer.getPasswordHash(), seed.password()));
+        }
+
+        for (UserSeed seed : data.officers()) {
+            em.createQuery("select o from LoanOfficer o where o.username = :username", LoanOfficer.class)
+                    .setParameter("username", seed.username())
+                    .getResultStream()
+                    .findFirst()
+                    .ifPresent(officer -> upgradePasswordHash(officer::setPasswordHash, officer.getPasswordHash(), seed.password()));
+        }
+    }
+
+    private void upgradePasswordHash(java.util.function.Consumer<String> setter, String storedHash, String seedPassword) {
+        if (!storedHash.startsWith("$2")) {
+            setter.accept(passwordEncoder.encode(seedPassword));
         }
     }
 }

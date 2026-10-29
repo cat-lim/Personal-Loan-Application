@@ -1,6 +1,23 @@
 import {Component, inject} from '@angular/core';
-import {LoanService} from '../loanservice/loanservice';
+import {EmploymentStatus, LoanService} from '../loanservice/loanservice';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {HttpErrorResponse} from '@angular/common/http';
+import {finalize, TimeoutError} from 'rxjs';
+import {Router} from '@angular/router';
+
+interface SubmissionErrorBody {
+  message?: unknown;
+  fields?: unknown;
+}
+
+const validationFieldLabels: Record<string, string> = {
+  amount: 'Loan amount',
+  termMonths: 'Loan term',
+  validTerm: 'Loan term',
+  purpose: 'Loan purpose',
+  employmentStatus: 'Employment status',
+  monthlyIncome: 'Monthly income',
+};
 
 @Component({
   selector: 'app-loanapplication',
@@ -51,10 +68,10 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 
           <label for="employment-status">Employment Status</label>
           <select id="employment-status" formControlName="employmentStatus" required>
-            <option value="employed">Employed</option>
-            <option value="self-employed">Self-Employed</option>
-            <option value="retired">Retired</option>
-            <option value="other">Other</option>
+            <option value="EMPLOYED">Employed</option>
+            <option value="SELF_EMPLOYED">Self-Employed</option>
+            <option value="RETIRED">Retired</option>
+            <option value="OTHER">Other</option>
           </select>
 
           <!-- Error message for employment status -->
@@ -82,7 +99,13 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/
             </p>
           }
 
-          <button type="submit">Submit Application</button>
+          @if (submissionError) {
+            <p class="form-error" role="alert">{{ submissionError }}</p>
+          }
+
+          <button type="submit" [disabled]="submissionPending || applicationSubmitted">
+            {{ submissionPending ? 'Submitting...' : applicationSubmitted ? 'Application submitted' : 'Submit Application' }}
+          </button>
         </form>
       </section>
   `,
@@ -91,6 +114,7 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 
 export class LoanApplication {
   loanService = inject(LoanService);
+  private readonly router = inject(Router);
   applyForm = new FormGroup({
     loanAmount: new FormControl('', [
       Validators.required,
@@ -107,6 +131,9 @@ export class LoanApplication {
     ]),
   });
   submitted = false;
+  submissionPending = false;
+  applicationSubmitted = false;
+  submissionError = '';
 
   showControlError(control: FormControl): boolean {
     return control.invalid && (control.touched || this.submitted);
@@ -116,17 +143,81 @@ export class LoanApplication {
     this.submitted = true;
     this.applyForm.markAllAsTouched();
 
-    if (this.applyForm.invalid) {
+    if (this.applyForm.invalid || this.submissionPending || this.applicationSubmitted) {
       return;
     }
 
-    // In the case that the received values are null/undefined, this sets it to '' instead
-    this.loanService.submitApplication(
-      this.applyForm.value.loanAmount ?? '',
-      this.applyForm.value.loanTerm ?? '',
-      this.applyForm.value.loanPurpose ?? '',
-      this.applyForm.value.employmentStatus ?? '',
-      this.applyForm.value.monthlyIncome ?? ''
-    );
+    this.submissionPending = true;
+    this.submissionError = '';
+
+    this.loanService.submitApplication({
+      amount: Number(this.applyForm.value.loanAmount),
+      termMonths: Number(this.applyForm.value.loanTerm),
+      purpose: this.applyForm.value.loanPurpose ?? '',
+      employmentStatus: this.applyForm.value.employmentStatus as EmploymentStatus,
+      monthlyIncome: Number(this.applyForm.value.monthlyIncome),
+    }).pipe(finalize(() => {
+      this.submissionPending = false;
+    })).subscribe({
+      next: (response) => {
+        this.submissionPending = false;
+        this.applicationSubmitted = true;
+        void this.router.navigate(['/customer/home'], {
+          state: {applicationReference: response.reference},
+        });
+      },
+      error: (error: HttpErrorResponse | TimeoutError) => {
+        if (error instanceof TimeoutError) {
+          this.submissionError = 'The backend did not respond within 20 seconds. Please try again.';
+        } else if (error.status === 401) {
+          this.submissionError = 'Your login session expired. Please log in again.';
+        } else if (error.status === 403) {
+          this.submissionError = 'Your session could not be authorized. Please sign in again with a customer account.';
+        } else if (error.status === 409) {
+          this.submissionError = 'This request conflicts with an earlier submission. Refresh your applications and try again.';
+        } else if (error.status === 400) {
+          this.submissionError = this.getBadRequestMessage(error.error);
+        } else if (error.status === 0) {
+          this.submissionError = 'Unable to reach the backend. Please ensure it is running.';
+        } else if (error.status >= 500) {
+          this.submissionError = 'The server encountered a problem while saving your application. Please try again later.';
+        } else {
+          this.submissionError = `The application could not be submitted (error ${error.status}). Please try again.`;
+        }
+      },
+    });
+  }
+
+  private getBadRequestMessage(response: unknown): string {
+    if (!this.isErrorBody(response)) {
+      return 'The server rejected the application. Check the form values and try again.';
+    }
+
+    if (this.isRecord(response.fields)) {
+      const fieldErrors = Object.entries(response.fields)
+        .filter((entry): entry is [string, string] => typeof entry[1] === 'string')
+        .map(([field, message]) => {
+          const label = validationFieldLabels[field] ?? 'Application detail';
+          return `${label}: ${message}`;
+        });
+
+      if (fieldErrors.length > 0) {
+        return `Please correct the following and try again: ${fieldErrors.join(' ')}`;
+      }
+    }
+
+    if (typeof response.message === 'string' && response.message.trim()) {
+      return response.message;
+    }
+
+    return 'The server rejected the application. Check the form values and try again.';
+  }
+
+  private isErrorBody(value: unknown): value is SubmissionErrorBody {
+    return this.isRecord(value);
+  }
+
+  private isRecord(value: unknown): value is Record<string, unknown> {
+    return typeof value === 'object' && value !== null && !Array.isArray(value);
   }
 }
