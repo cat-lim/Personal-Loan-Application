@@ -1,4 +1,4 @@
-import {Component, OnInit, inject} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, inject} from '@angular/core';
 import {CurrencyPipe, DatePipe} from '@angular/common';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -28,6 +28,7 @@ import{
         } @else if(application; as loan) {
          <div class="details-card">
             <p><strong>Reference:</strong> {{loan.reference}}</p>
+            <p><strong>Applicant:</strong> {{loan.applicantName}}</p>
             <p><strong>Loan Amount:</strong> {{loan.loanAmount | currency}}</p>
             <p><strong>Loan Term:</strong> {{loan.termMonths}} months</p>
             <p><strong>Purpose:</strong> {{loan.purpose}}</p>
@@ -99,6 +100,7 @@ export class CustomerDetailComponent implements OnInit {
     
     private route = inject(ActivatedRoute);
     private customerService = inject(CustomerService);
+    private readonly changeDetector = inject(ChangeDetectorRef);
 
     application: CustomerApplication | null = null;
     loading = false;
@@ -127,10 +129,12 @@ export class CustomerDetailComponent implements OnInit {
                 this.loading = false;
                 if (!application) {
                     this.errorMessage = 'No application details were returned. It may no longer be available.';
+                    this.changeDetector.markForCheck();
                     return;
                 }
 
                 this.application = application;
+                this.changeDetector.markForCheck();
             },
             error: (error: HttpErrorResponse) => {
                 this.loading = false;
@@ -145,6 +149,7 @@ export class CustomerDetailComponent implements OnInit {
                 } else {
                     this.errorMessage = 'Unable to load details. Please try again.';
                 }
+                this.changeDetector.markForCheck();
             },
         });
     }
