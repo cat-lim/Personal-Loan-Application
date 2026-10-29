@@ -36,14 +36,13 @@ import {CustomerApplication, CustomerService} from './customer.service';
           <table>
             <thead>
               <tr>
-                <th scope="col">Reference</th>
+                <th scope="col">Reference No.</th>
                 <th scope="col">Amount</th>
                 <th scope="col">Term</th>
                 <th scope="col">Purpose</th>
                 <th scope="col">Status</th>
                 <th scope="col">Submitted</th>
-                <th scope="col">Decision note</th>
-                <th scope="col">Actions</th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -53,11 +52,22 @@ import {CustomerApplication, CustomerService} from './customer.service';
                   <td>{{ application.loanAmount | currency }}</td>
                   <td>{{ application.termMonths }} months</td>
                   <td>{{ application.purpose }}</td>
-                  <td><span class="status">{{ application.status }}</span></td>
-                  <td>{{ application.submittedAt | date:'short' }}</td>
-                  <td>{{ application.decisionNote || '—' }}</td>
                   <td>
-                    <a [routerLink]= "['/customer/applications', application.id]">View details</a> </td>
+                    <span
+                      class="status"
+                      [class.status-approved]="application.status === 'APPROVED'"
+                      [class.status-rejected]="application.status === 'REJECTED'">
+                      {{ application.status }}
+                    </span>
+                  </td>
+                  <td>{{ application.submittedAt | date:'short' }}</td>
+                  <td>
+                    <a
+                      class="primary-button"
+                      [routerLink]="['/customer/applications', application.id]">
+                      View details
+                    </a>
+                  </td>
                 </tr>
               }
             </tbody>

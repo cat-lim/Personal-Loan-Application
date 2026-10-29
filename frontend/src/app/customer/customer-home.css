@@ -29,6 +29,17 @@
   font: inherit;
 }
 
+.primary-button:hover {
+  background: var(--secondary-color);
+  border-color: var(--secondary-color);
+}
+
+.primary-button:focus-visible,
+.secondary-button:focus-visible {
+  outline: 3px solid rgb(96 93 200 / 30%);
+  outline-offset: 2px;
+}
+
 .secondary-button {
   background: white;
   color: var(--primary-color);
@@ -52,15 +63,6 @@ td {
 
 th {
   background: var(--accent-color);
-}
-
-.status {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 12px;
-  background: var(--accent-color);
-  color: var(--primary-color);
-  font-size: 0.9rem;
 }
 
 .empty-state {

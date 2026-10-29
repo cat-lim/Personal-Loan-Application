@@ -41,6 +41,21 @@ export class AuthService {
     );
   }
 
+  logout(): Observable<void> {
+    return this.getCsrfToken().pipe(
+      switchMap(({token, headerName}) =>
+        this.http.post<void>(
+          `${this.apiUrl}/logout`,
+          {},
+          {
+            headers: new HttpHeaders().set(headerName, token),
+            withCredentials: true,
+          },
+        ),
+      ),
+    );
+  }
+
   getCsrfToken(): Observable<CsrfTokenResponse> {
     return this.http.get<CsrfTokenResponse>(`${this.apiUrl}/csrf`, {
       withCredentials: true,
