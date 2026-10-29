@@ -5,10 +5,18 @@
   </p>
 
   <ng-container *ngIf="application">
+    <button
+      type="button"
+      class="secondary-button"
+      routerLink="/officer/queue">
+      Back to applications
+    </button>
+
     <header class="page-header">
       <div>
         <h1>Review Application</h1>
         <p>Reference {{ application.reference }}</p>
+        <p class="submitted-date">Submitted {{ application.submittedAt | date:'medium' }}</p>
       </div>
       <span class="status">{{ application.status }}</span>
     </header>
@@ -19,10 +27,6 @@
         <div class="detail-item">
           <dt>Applicant Name</dt>
           <dd>{{ application.applicantName }}</dd>
-        </div>
-        <div class="detail-item">
-          <dt>Username</dt>
-          <dd>{{ application.applicantUsername }}</dd>
         </div>
         <div class="detail-item">
           <dt>Loan Amount</dt>
@@ -43,10 +47,6 @@
         <div class="detail-item">
           <dt>Monthly Income</dt>
           <dd>{{ application.monthlyIncome | currency }}</dd>
-        </div>
-        <div class="detail-item">
-          <dt>Submitted</dt>
-          <dd>{{ application.submittedAt | date:'medium' }}</dd>
         </div>
       </dl>
     </section>
@@ -79,12 +79,14 @@
     <p *ngIf="errorMessage" class="error-message" role="alert">{{ errorMessage }}</p>
     <p *ngIf="conflictMessage" class="error-message" role="alert">{{ conflictMessage }}</p>
 
-    <button
-      type="button"
-      class="primary-button"
-      (click)="submitDecision()"
-      [disabled]="saving">
-      {{ saving ? 'Submitting...' : 'Submit decision' }}
-    </button>
+    <div class="decision-actions">
+      <button
+        type="button"
+        class="primary-button"
+        (click)="submitDecision()"
+        [disabled]="saving">
+        {{ saving ? 'Submitting...' : 'Submit decision' }}
+      </button>
+    </div>
   </ng-container>
 </section>

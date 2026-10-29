@@ -15,6 +15,7 @@ export interface CustomerApplication {
   submittedAt: string;
   decisionNote: string | null;
   decidedAt: string | null;
+  decisionOfficerName: string | null;
 }
 
 @Injectable({

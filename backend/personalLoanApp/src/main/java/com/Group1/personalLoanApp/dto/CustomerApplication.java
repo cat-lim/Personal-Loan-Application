@@ -17,7 +17,8 @@ public record CustomerApplication(
         LoanApplication.ApplicationStatus status,
         Instant submittedAt,
         String decisionNote,
-        Instant decidedAt
+        Instant decidedAt,
+        String decisionOfficerName
 ) {
     /**
      * @param application: LoanApplication
@@ -36,7 +37,10 @@ public record CustomerApplication(
                 application.getStatus(),
                 application.getSubmittedAt(),
                 application.getDecisionNote(),
-                application.getDecidedAt()
+                application.getDecidedAt(),
+                application.getDecidedBy() == null
+                        ? null
+                        : application.getDecidedBy().getFullName()
         );
     }
 }

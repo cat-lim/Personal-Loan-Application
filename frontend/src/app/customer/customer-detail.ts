@@ -45,6 +45,10 @@ import{
             @if (loan.decidedAt){
                 <p><strong>Decided At:</strong> {{loan.decidedAt | date: 'medium'}}</p>
             }
+
+            @if (loan.decisionOfficerName){
+                <p><strong>Decision officer:</strong> {{loan.decisionOfficerName}}</p>
+            }
             
             @if (loan.status === 'SUBMITTED'){
                 <p>Your application is pending review.</p>
