@@ -1,48 +1,84 @@
-.form-error {
-  color: #b42318;
+.listing-apply {
+  box-sizing: border-box;
+  width: min(100% - 40px, 640px);
+  margin: 36px auto;
+  padding: 36px;
+  border: 1px solid #e6e8f0;
+  border-radius: 16px;
+  background: #fff;
+  color: #20243a;
+  box-shadow: 0 16px 40px rgb(34 42 74 / 8%);
 }
 
-.form-success {
-  color: #067647;
+.section-heading {
+  margin-bottom: 28px;
+  font-size: clamp(24px, 4vw, 30px);
+  line-height: 1.25;
 }
 
-.results {
+form {
   display: grid;
-  column-gap: 14px;
-  row-gap: 14px;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 400px));
-  margin-top: 50px;
-  justify-content: space-around;
 }
 
-input[type="text"] {
-  border: solid 1px var(--primary-color);
-  padding: 10px;
+label {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+input,
+select {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 46px;
+  margin-bottom: 20px;
+  padding: 10px 12px;
+  border: 1px solid #cfd3df;
   border-radius: 8px;
-  margin-right: 4px;
-  display: inline-block;
-  width: 30%;
+  background: #fff;
+  color: #20243a;
+  font: inherit;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--primary-color, #605dc8);
+  outline: 3px solid rgb(96 93 200 / 16%);
+}
+
+.form-error {
+  margin: -12px 0 16px;
+  color: #b42318;
+  font-size: 13px;
+  line-height: 1.45;
 }
 
 button {
-  padding: 10px;
-  border: solid 1px var(--primary-color);
-  background: var(--primary-color);
-  color: white;
+  min-height: 48px;
+  margin-top: 4px;
+  padding: 10px 16px;
+  border: 1px solid var(--primary-color, #605dc8);
   border-radius: 8px;
+  background: var(--primary-color, #605dc8);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
 }
 
-@media (min-width: 500px) and (max-width: 768px) {
-  .results {
-      grid-template-columns: repeat(2, 1fr);
+button:hover:not(:disabled) {
+  background: #4d4ab0;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+@media (max-width: 520px) {
+  .listing-apply {
+    width: calc(100% - 32px);
+    margin: 24px auto;
+    padding: 26px 22px;
   }
-  input[type="text"] {
-      width: 70%;
-  }   
-}
-
-@media (max-width: 499px) {
-  .results {
-      grid-template-columns: 1fr;
-  }    
 }
