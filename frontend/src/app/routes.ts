@@ -5,11 +5,13 @@ import {Home} from './home/home';
 import {Login} from './login/login';
 import {LoanApplication} from './loanapply/loanapply';
 import {AuthService} from './authservice/authservice';
+import {OfficerQueueComponent} from './officer/officer-home/officer-home';
+import {OfficerReviewComponent} from './officer/officer-review/officer-review';
+import {OfficerLogin} from './officer/officer-login/officer-login';
 import {CustomerHome} from './customer/customer-home';
-import { CustomerDetailComponent } from './customer/customer-detail';
+import {CustomerDetailComponent} from './customer/customer-detail';
 import {OfficerAuthGuard} from './guards/officer-auth.guard';
 import {Unauthorized} from './pages/unauthorized';
-import {OfficerQueueComponent} from './officer/officer-home;
 
 const customerAuthGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
@@ -33,10 +35,39 @@ const routeConfig: Routes = [
     title: 'Customer login',
   },
   {
+    path: 'officer-login',
+    component: OfficerLogin,
+    title: 'Officer login',
+  },
+  {
+    path: 'customer/home',
+    component: CustomerHome,
+    canActivate: [customerAuthGuard],
+    title: 'My loan applications',
+  },
+  {
     path: 'apply',
     component: LoanApplication,
     canActivate: [customerAuthGuard],
     title: 'Loan application',
+  },
+  {
+    path: 'officer/queue',
+    component: OfficerQueueComponent,
+    canActivate: [OfficerAuthGuard],
+    title: 'Officer application queue',
+  },
+  {
+    path: 'officer/applications/:id',
+    component: OfficerReviewComponent,
+    canActivate: [OfficerAuthGuard],
+    title: 'Review loan application',
+  },
+  {
+    path: 'officer',
+    component: OfficerQueueComponent,
+    canActivate: [OfficerAuthGuard],
+    title: 'Officer Dashboard',
   },
   {
     path: 'customer/applications/:id',
@@ -45,30 +76,13 @@ const routeConfig: Routes = [
     title: 'Customer application details',
   },
   {
+    path: 'unauthorized',
+    component: Unauthorized,
+    title: 'Unauthorized',
+  },
+  {
     path: '**',
     redirectTo: '',
   },
-<<<<<<< HEAD
-
-   {
-      path: 'customer/applications/:id',
-      component: CustomerDetailComponent,
-      canActivate: [customerAuthGuard],
-      title: 'Customer Application Details'
-    },
-    {
-      path: 'unauthorized',
-      component: Unauthorized,
-      title: 'Unauthorized'
-    },
-
-    {
-      path: 'officer',
-      component: OfficerQueueComponent,
-      canActivate: [OfficerAuthGuard],
-      title: 'Officer Dashboard'
-    }
-=======
->>>>>>> ee6e1ce53bb1049a7ece5d04fc9d1282b86c329c
 ];
 export default routeConfig;

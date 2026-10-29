@@ -15,6 +15,7 @@ export interface CustomerApplication {
   submittedAt: string;
   decisionNote: string | null;
   decidedAt: string | null;
+  decisionOfficerName: string | null;
 }
 
 @Injectable({
@@ -30,10 +31,6 @@ export class CustomerService {
     });
   }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> ee6e1ce53bb1049a7ece5d04fc9d1282b86c329c
   getApplication(id: number): Observable<CustomerApplication> {
     return this.http.get<CustomerApplication>(`${this.apiUrl}/${id}`, {
       withCredentials: true,

@@ -32,6 +32,41 @@ public class DecisionController {
         this.loanOfficerRepository = loanOfficerRepository;
     }
 
+//     @PostMapping("/{applicationId}/decision")
+//     @PreAuthorize("isAuthenticated() and hasRole('OFFICER')")
+//     public ResponseEntity<DecisionResponse> decide(
+//             @PathVariable Long applicationId,
+//             @Valid @RequestBody DecisionRequest request,
+//             Authentication authentication) {
+        
+//         if (authentication == null
+//                 || authentication instanceof AnonymousAuthenticationToken) {
+//             throw new ResponseStatusException(
+//                     HttpStatus.UNAUTHORIZED,
+//                     "Authentication is required."
+//             );
+//         }
+
+//         String username = authentication.getName()
+//                 .trim()
+//                 .toLowerCase(Locale.ROOT);
+
+//         LoanOfficer officer = loanOfficerRepository
+//                 .findByUsername(username)
+//                 .orElseThrow(() -> new ResponseStatusException(
+//                         HttpStatus.FORBIDDEN,
+//                         "The authenticated user is not a registered officer."
+//                 ));
+
+//         DecisionResponse response = service.decide(
+//                 applicationId,
+//                 request,
+//                 officer.getId()
+//         );
+
+//         return ResponseEntity.ok(response);
+//     }
+
     @PostMapping("/{applicationId}/decision")
     @PreAuthorize("isAuthenticated() and hasRole('OFFICER')")
     public ResponseEntity<DecisionResponse> decide(
@@ -61,7 +96,8 @@ public class DecisionController {
         DecisionResponse response = service.decide(
                 applicationId,
                 request,
-                officer.getId()
+                officer.getId(),
+                officer.getUsername()
         );
 
         return ResponseEntity.ok(response);

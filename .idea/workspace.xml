@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4a8ae9bf-33ca-4f5d-952a-e0cf4bbd4c1c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/decision/controller/DecisionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/decision/controller/DecisionController.java" afterDir="false" />
-    </list>
+    <list default="true" id="4a8ae9bf-33ca-4f5d-952a-e0cf4bbd4c1c" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -63,7 +60,7 @@
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "Spring Boot.PersonalLoanAppApplication.executor": "Run",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "Alex",
+    "git-widget-placeholder": "saparikh",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/saparikh/Downloads/Personal-Loan-Application",
     "node.js.detected.package.eslint": "true",
@@ -118,6 +115,12 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+    <option name="exactExcludedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/frontend/node_modules/piscina/test/fixtures/notify-then-sleep-or.js" />
+        <option value="$PROJECT_DIR$/frontend/node_modules/piscina/test/fixtures/wait-for-notify.js" />
+      </list>
+    </option>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

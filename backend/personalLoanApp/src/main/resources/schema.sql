@@ -53,3 +53,21 @@ CREATE TABLE loan_application (
             AND (status <> 'REJECTED' OR NULLIF(BTRIM(decision_note), '') IS NOT NULL))
     )
 );
+
+-- Customer history index
+-- Supports customer-specific loan history ordered newest first.
+CREATE INDEX idx_loan_application_customer_history
+ON loan_application (
+    customer_id,
+    submitted_at DESC,
+    id DESC
+);
+
+-- Officer pending queue index
+-- Only indexes applications waiting for a decision.
+CREATE INDEX idx_loan_application_pending_queue
+ON loan_application (
+    submitted_at ASC,
+    id ASC
+)
+WHERE status = 'SUBMITTED';

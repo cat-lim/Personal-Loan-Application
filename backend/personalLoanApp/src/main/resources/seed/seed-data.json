@@ -1,10 +1,13 @@
 {
   "customers": [
     { "username": "olivia.chen", "password": "password123", "fullName": "Olivia Chen" },
-    { "username": "mateo.singh", "password": "password123", "fullName": "Mateo Singh" }
+    { "username": "mateo.singh", "password": "password123", "fullName": "Mateo Singh" },
+    { "username": "avery.brooks", "password": "password123", "fullName": "Avery Brooks" }
+
   ],
   "officers": [
-    { "username": "jordan.lee", "password": "password123", "fullName": "Jordan Lee" }
+    { "username": "jordan.lee", "password": "password123", "fullName": "Jordan Lee" },
+    { "username": "crimson.king", "password":  "password123", "fullName":  "Crimson King" }
   ],
   "applications": [
     {

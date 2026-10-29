@@ -6,14 +6,11 @@ import {RouterOutlet, RouterLink} from '@angular/router';
   imports: [RouterOutlet, RouterLink],
   template: ` 
     <main>
-      <a [routerLink]="'/'">Home</a>
-      <header class="brand-name">
-        <img
-          class="brand-logo"
-          src="/public/logo.svg"
-          alt="logo"
-          aria-hidden="true"
-        />
+      <header class="site-header">
+        <span class="brand-name">Northstar</span>
+        <nav aria-label="Main navigation">
+          <a class="home-link" routerLink="/">Home</a>
+        </nav>
       </header>
 
       <section class="content">
