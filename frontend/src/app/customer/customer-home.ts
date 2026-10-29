@@ -1,4 +1,4 @@
-import {Component, OnInit, inject} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, inject} from '@angular/core';
 import {CurrencyPipe, DatePipe} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {CustomerApplication, CustomerService} from './customer.service';
@@ -70,6 +70,7 @@ import {CustomerApplication, CustomerService} from './customer.service';
 })
 export class CustomerHome implements OnInit {
   private readonly customerService = inject(CustomerService);
+  private readonly changeDetector = inject(ChangeDetectorRef);
 
   applications: CustomerApplication[] = [];
   loading = false;
@@ -94,10 +95,12 @@ export class CustomerHome implements OnInit {
       next: (applications) => {
         this.applications = applications;
         this.loading = false;
+        this.changeDetector.markForCheck();
       },
       error: () => {
         this.errorMessage = 'Unable to load your applications. Please try again.';
         this.loading = false;
+        this.changeDetector.markForCheck();
       },
     });
   }
