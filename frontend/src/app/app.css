@@ -16,15 +16,19 @@
 }
 
 .brand-name {
+  display: inline-flex;
+  align-items: center;
   color: var(--primary-color, #605dc8);
   font-size: 22px;
   font-weight: 700;
   letter-spacing: -0.02em;
+  text-decoration: none;
 }
 
 .site-header nav {
   display: flex;
   align-items: center;
+  gap: 12px;
 }
 
 .home-link {
@@ -51,6 +55,35 @@
 .home-link:focus-visible {
   outline: 3px solid rgb(96 93 200 / 30%);
   outline-offset: 3px;
+}
+
+.brand-name:focus-visible,
+.sign-out-button:focus-visible {
+  outline: 3px solid rgb(96 93 200 / 30%);
+  outline-offset: 3px;
+}
+
+.sign-out-button {
+  min-height: 42px;
+  padding: 0 18px;
+  border: 1px solid var(--primary-color, #605dc8);
+  border-radius: 8px;
+  background: var(--primary-color, #605dc8);
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sign-out-button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.sign-out-error {
+  padding: 8px 20px;
+  color: #b42318;
 }
 
 .content {
