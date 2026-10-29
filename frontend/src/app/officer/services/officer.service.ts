@@ -10,7 +10,7 @@ import { AuthService } from '../../authservice/authservice';
 })
 export class OfficerService {
 
-  private apiUrl = 'http://localhost:8081/api/officer/applications';
+  private readonly apiUrl = 'http://localhost:8080/api/officer/applications';
 
   constructor(
     private http: HttpClient,
