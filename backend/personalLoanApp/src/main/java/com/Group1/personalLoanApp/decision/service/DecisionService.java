@@ -25,7 +25,9 @@ public class DecisionService {
     public DecisionResponse decide(
             Long applicationId,
             DecisionRequest request,
-            Long officerId) {
+            Long officerId,
+            String officerUsername)
+    {
 
         if (applicationId == null) {
             throw new ResponseStatusException(
@@ -41,7 +43,7 @@ public class DecisionService {
             );
         }
 
-        if (officerId == null) {
+        if (officerUsername == null) {
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN,
                     "An authenticated officer is required."
@@ -89,9 +91,13 @@ public class DecisionService {
         if (updated == 1) {
             return new DecisionResponse(
                     applicationId,
-                    request.decision()
+                    request.decision(),
+                    officerId,
+                    officerUsername
             );
         }
+
+
 
         // The atomic update failed: distinguish a missing application
         // from an application that is no longer eligible for a decision.

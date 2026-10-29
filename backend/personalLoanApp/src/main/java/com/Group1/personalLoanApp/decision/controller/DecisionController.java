@@ -61,7 +61,8 @@ public class DecisionController {
         DecisionResponse response = service.decide(
                 applicationId,
                 request,
-                officer.getId()
+                officer.getId(),
+                officer.getUsername()
         );
 
         return ResponseEntity.ok(response);
