@@ -42,15 +42,14 @@ const routeConfig: Routes = [
     title: 'Loan application',
   },
   {
+    path: 'customer/applications/:id',
+    component: CustomerDetailComponent,
+    canActivate: [customerAuthGuard],
+    title: 'Customer application details',
+  },
+  {
     path: '**',
     redirectTo: '',
   },
-
-   {
-      path: 'customer/applications/:id',
-      component: CustomerDetailComponent,
-      canActivate: [customerAuthGuard],
-      title: 'Customer Application Details'
-    }
 ];
 export default routeConfig;

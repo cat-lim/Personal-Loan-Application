@@ -3,7 +3,7 @@ import {inject, Injectable} from '@angular/core';
 import {Observable, switchMap, timeout} from 'rxjs';
 import {AuthService} from '../authservice/authservice';
 
-import {LoanApplication} from '../models/loan.model';
+// import {LoanApplication} from '../models/loan.model';
 
 export type EmploymentStatus = 'EMPLOYED' | 'SELF_EMPLOYED' | 'RETIRED' | 'OTHER';
 
@@ -29,27 +29,6 @@ export class LoanService {
   private readonly authService = inject(AuthService);
   private readonly apiUrl = 'http://localhost:8080/api/loans';
 
-<<<<<<< HEAD
-  private http = inject(HttpClient);
-
-  private apiUrl = '/api/loans';
-
-  getMyLoans(): Observable<LoanApplication[]> {
-    return this.http.get<LoanApplication[]>(`${this.apiUrl}/mine`,
-       { withCredentials: true });
-  }
-
-  getLoanByReference(reference: string): Observable<LoanApplication> {
-    return this.http.get<LoanApplication>(`${this.apiUrl}/reference/${encodeURIComponent(reference)}`,
-       { withCredentials: true });
-  }
-  submitApplication(loanAmount: string, loanTerm: string, loanPurpose: string,
-      employmentStatus: string, monthlyIncome: string) {
-    console.log(
-      `Loan application received: loanAmount: ${loanAmount}, loanTerm: ${loanTerm}, ` +
-      `loanPurpose: ${loanPurpose}, employmentStatus: ${employmentStatus}, ` +
-      `monthlyIncome: ${monthlyIncome}.`,
-=======
   submitApplication(request: LoanSubmissionRequest): Observable<LoanSubmissionResponse> {
     return this.authService.getCsrfToken().pipe(
       switchMap(({token, headerName}) =>
@@ -65,7 +44,6 @@ export class LoanService {
         ),
       ),
       timeout(20_000),
->>>>>>> origin/taj2
     );
   }
 }
