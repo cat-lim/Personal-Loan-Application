@@ -1,0 +1,60 @@
+<section class="officer-home">
+  <header class="page-header">
+    <div>
+      <h1>Pending Applications</h1>
+      <p>Review applications and record a decision.</p>
+    </div>
+  </header>
+
+  <p *ngIf="successMessage" class="success-message" role="status">
+    {{ successMessage }}
+  </p>
+
+  <p *ngIf="loading" role="status">Loading pending applications...</p>
+
+  <ng-container *ngIf="!loading">
+    <div *ngIf="errorMessage" class="error-state">
+      <p class="error-message" role="alert">{{ errorMessage }}</p>
+      <button type="button" class="secondary-button" (click)="loadQueue()">Try again</button>
+    </div>
+
+    <section *ngIf="!errorMessage && applications.length === 0" class="empty-state">
+      <h2>No pending applications</h2>
+      <p>New applications will appear here when they are ready for review.</p>
+    </section>
+
+    <div *ngIf="!errorMessage && applications.length > 0" class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Reference</th>
+            <th scope="col">Applicant</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Term</th>
+            <th scope="col">Purpose</th>
+            <th scope="col">Status</th>
+            <th scope="col">Review</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let app of applications">
+            <td>{{ app.reference }}</td>
+            <td>{{ app.applicantName }}</td>
+            <td>{{ app.loanAmount | currency }}</td>
+            <td>{{ app.termMonths }} months</td>
+            <td>{{ app.purpose }}</td>
+            <td><span class="status">{{ app.status }}</span></td>
+            <td>
+              <button
+                type="button"
+                class="primary-button"
+                [routerLink]="['/officer/applications', app.id]">
+                Review
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </ng-container>
+</section>

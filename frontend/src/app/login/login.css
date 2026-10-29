@@ -1,0 +1,127 @@
+:host {
+  box-sizing: border-box;
+  display: grid;
+  min-height: calc(100vh - 100px);
+  margin: -10px;
+  padding: 40px 20px;
+  place-items: center;
+  background: #f5f6fa;
+  color: #20243a;
+  font-family: inherit;
+}
+
+.login-card {
+  box-sizing: border-box;
+  width: min(100%, 440px);
+  padding: 40px;
+  border: 1px solid #e6e8f0;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 16px 40px rgb(34 42 74 / 10%);
+}
+
+.eyebrow {
+  margin-bottom: 12px;
+  color: var(--primary-color, #605dc8);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin-bottom: 8px;
+  font-size: 28px;
+  line-height: 1.25;
+}
+
+.intro {
+  margin-bottom: 28px;
+  color: #646a7d;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.form-field {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 12px;
+  border: 1px solid #cfd3df;
+  border-radius: 8px;
+  background: #fff;
+  color: #20243a;
+  font: inherit;
+}
+
+input::placeholder {
+  color: #9298a8;
+}
+
+input:focus {
+  border-color: var(--primary-color, #605dc8);
+  outline: 3px solid rgb(96 93 200 / 16%);
+}
+
+button {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 6px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--primary-color, #605dc8);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+
+button:hover:not(:disabled) {
+  background: #4d4ab0;
+}
+
+button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.form-error {
+  margin: 0 0 12px;
+  color: #b42318;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 24px;
+  color: #555b70;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  color: var(--primary-color, #605dc8);
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 30px 24px;
+  }
+
+  h1 {
+    font-size: 25px;
+  }
+}

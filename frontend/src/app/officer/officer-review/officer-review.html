@@ -1,0 +1,90 @@
+<section class="officer-review">
+  <p *ngIf="loading" role="status">Loading application...</p>
+  <p *ngIf="errorMessage && !application" class="error-message" role="alert">
+    {{ errorMessage }}
+  </p>
+
+  <ng-container *ngIf="application">
+    <header class="page-header">
+      <div>
+        <h1>Review Application</h1>
+        <p>Reference {{ application.reference }}</p>
+      </div>
+      <span class="status">{{ application.status }}</span>
+    </header>
+
+    <section class="application-details">
+      <h2>Application details</h2>
+      <dl class="details-grid">
+        <div class="detail-item">
+          <dt>Applicant Name</dt>
+          <dd>{{ application.applicantName }}</dd>
+        </div>
+        <div class="detail-item">
+          <dt>Username</dt>
+          <dd>{{ application.applicantUsername }}</dd>
+        </div>
+        <div class="detail-item">
+          <dt>Loan Amount</dt>
+          <dd>{{ application.loanAmount | currency }}</dd>
+        </div>
+        <div class="detail-item">
+          <dt>Term</dt>
+          <dd>{{ application.termMonths }} months</dd>
+        </div>
+        <div class="detail-item">
+          <dt>Purpose</dt>
+          <dd>{{ application.purpose }}</dd>
+        </div>
+        <div class="detail-item">
+          <dt>Employment Status</dt>
+          <dd>{{ application.employmentStatus }}</dd>
+        </div>
+        <div class="detail-item">
+          <dt>Monthly Income</dt>
+          <dd>{{ application.monthlyIncome | currency }}</dd>
+        </div>
+        <div class="detail-item">
+          <dt>Submitted</dt>
+          <dd>{{ application.submittedAt | date:'medium' }}</dd>
+        </div>
+      </dl>
+    </section>
+
+    <form class="decision-form" [formGroup]="decisionForm">
+      <h2>Decision</h2>
+
+      <fieldset class="decision-options">
+        <legend>Choose an outcome</legend>
+        <label class="decision-option">
+          <input type="radio" value="APPROVED" formControlName="decision">
+          <span>Approve</span>
+        </label>
+        <label class="decision-option">
+          <input type="radio" value="REJECTED" formControlName="decision">
+          <span>Reject</span>
+        </label>
+      </fieldset>
+
+      <label class="reason-label" for="reason">Decision note or rejection reason</label>
+      <textarea
+        id="reason"
+        rows="5"
+        formControlName="reason"
+        placeholder="Add a note for the applicant">
+      </textarea>
+    </form>
+
+    <p *ngIf="rejectionError" class="error-message" role="alert">{{ rejectionError }}</p>
+    <p *ngIf="errorMessage" class="error-message" role="alert">{{ errorMessage }}</p>
+    <p *ngIf="conflictMessage" class="error-message" role="alert">{{ conflictMessage }}</p>
+
+    <button
+      type="button"
+      class="primary-button"
+      (click)="submitDecision()"
+      [disabled]="saving">
+      {{ saving ? 'Submitting...' : 'Submit decision' }}
+    </button>
+  </ng-container>
+</section>

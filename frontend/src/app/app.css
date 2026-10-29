@@ -1,12 +1,74 @@
 :host {
   --content-padding: 10px;
 }
-header {
-  display: block;
-  height: 60px;
-  padding: var(--content-padding);
-  box-shadow: 0px 5px 25px var(--shadow-color);
+
+.site-header {
+  box-sizing: border-box;
+  display: flex;
+  min-height: 72px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 12px clamp(20px, 5vw, 56px);
+  border-bottom: 1px solid #e6e8f0;
+  background: #fff;
+  box-shadow: 0 6px 24px rgb(34 42 74 / 7%);
 }
+
+.brand-name {
+  color: var(--primary-color, #605dc8);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.site-header nav {
+  display: flex;
+  align-items: center;
+}
+
+.home-link {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 18px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--primary-color, #605dc8);
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.home-link:hover {
+  border-color: #dedcf8;
+  background: #f5f4ff;
+  color: #4d4ab0;
+}
+
+.home-link:focus-visible {
+  outline: 3px solid rgb(96 93 200 / 30%);
+  outline-offset: 3px;
+}
+
 .content {
   padding: var(--content-padding);
+}
+
+@media (max-width: 480px) {
+  .site-header {
+    min-height: 64px;
+    padding: 10px 16px;
+  }
+
+  .brand-name {
+    font-size: 20px;
+  }
+
+  .home-link {
+    min-height: 40px;
+    padding: 0 14px;
+  }
 }

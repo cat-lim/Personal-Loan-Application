@@ -1,40 +1,125 @@
-.results {
+.home-page {
+  box-sizing: border-box;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 52px 24px 64px;
+  color: #20243a;
+  font-family: inherit;
+}
+
+.welcome {
+  max-width: 680px;
+  margin: 0 auto 44px;
+  text-align: center;
+}
+
+.eyebrow {
+  margin-bottom: 12px;
+  color: var(--primary-color, #605dc8);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin-bottom: 16px;
+  font-size: clamp(30px, 5vw, 44px);
+  line-height: 1.15;
+}
+
+.intro {
+  color: #646a7d;
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.sign-in-options h2 {
+  margin-bottom: 20px;
+  font-size: 21px;
+  text-align: center;
+}
+
+.option-grid {
   display: grid;
-  column-gap: 14px;
-  row-gap: 14px;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 400px));
-  margin-top: 50px;
-  justify-content: space-around;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
 }
 
-input[type="text"] {
-  border: solid 1px var(--primary-color);
-  padding: 10px;
+.option-card {
+  display: flex;
+  min-height: 210px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 28px;
+  border: 1px solid #e6e8f0;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 12px 32px rgb(34 42 74 / 8%);
+}
+
+.option-card h3 {
+  margin-bottom: 10px;
+  font-size: 19px;
+}
+
+.option-card p {
+  margin-bottom: 24px;
+  color: #646a7d;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.sign-in-link {
+  display: inline-flex;
+  min-height: 44px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  padding: 0 18px;
+  border: 1px solid var(--primary-color, #605dc8);
   border-radius: 8px;
-  margin-right: 4px;
-  display: inline-block;
-  width: 30%;
+  background: var(--primary-color, #605dc8);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
 }
 
-button {
-  padding: 10px;
-  border: solid 1px var(--primary-color);
-  background: var(--primary-color);
-  color: white;
-  border-radius: 8px;
+.sign-in-link:hover {
+  background: #4d4ab0;
 }
 
-@media (min-width: 500px) and (max-width: 768px) {
-  .results {
-      grid-template-columns: repeat(2, 1fr);
+.secondary-link {
+  background: #fff;
+  color: var(--primary-color, #605dc8);
+}
+
+.secondary-link:hover {
+  background: #f5f4ff;
+}
+
+.sign-in-link:focus-visible {
+  outline: 3px solid rgb(96 93 200 / 30%);
+  outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+  .home-page {
+    padding: 36px 20px 48px;
   }
-  input[type="text"] {
-      width: 70%;
-  }   
-}
 
-@media (max-width: 499px) {
-  .results {
-      grid-template-columns: 1fr;
-  }    
+  .welcome {
+    margin-bottom: 32px;
+  }
+
+  .option-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .option-card {
+    min-height: 180px;
+    padding: 24px;
+  }
 }
