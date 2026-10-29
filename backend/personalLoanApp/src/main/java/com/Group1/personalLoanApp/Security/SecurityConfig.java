@@ -78,8 +78,8 @@ public class SecurityConfig {
                                 .requestMatchers(
                                         HttpMethod.POST, "/api/loans/submit").hasRole("CUSTOMER")
                                 .requestMatchers("/api/applications/**").hasRole("CUSTOMER") //Customer RBAC
-                                // .requestMatchers("/api/officer/applications/**").hasRole("OFFICER") //Officer RBAC
-                                .requestMatchers("/api/officer/applications/**").permitAll()
+                                .requestMatchers("/api/officer/applications/**").hasRole("OFFICER") //Officer RBAC
+                                // .requestMatchers("/api/officer/applications/**").permitAll()
                                 .anyRequest().permitAll()
                                 )
                                 .exceptionHandling(errors ->

@@ -8,7 +8,7 @@ export interface AuthResponse {
   role: 'CUSTOMER' | 'OFFICER';
 }
 
-interface CsrfTokenResponse {
+export interface CsrfTokenResponse {
   token: string;
   headerName: string;
 }
@@ -41,7 +41,7 @@ export class AuthService {
     );
   }
 
-  private getCsrfToken(): Observable<CsrfTokenResponse> {
+  getCsrfToken(): Observable<CsrfTokenResponse> {
     return this.http.get<CsrfTokenResponse>(`${this.apiUrl}/csrf`, {
       withCredentials: true,
     });

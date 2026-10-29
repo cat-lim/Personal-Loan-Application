@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, switchMap } from 'rxjs';
 
 import { OfficerApplication } from '../models/officer-application.model';
+import { AuthService } from '../../authservice/authservice';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class OfficerService {
   private apiUrl = 'http://localhost:8081/api/officer/applications';
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private authService: AuthService
   ) {}
 
   getPendingQueue(): Observable<OfficerApplication[]> {
@@ -43,16 +45,7 @@ export class OfficerService {
   reason: string
 ) {
 
-  return this.http.post(
-    `${this.apiUrl}/${id}/decision`,
-    {
-      decision: 'APPROVED',
-      reason
-    },
-    {
-      withCredentials: true
-    }
-  );
+  return this.submitDecision(id, 'APPROVED', reason);
 }
 
 rejectApplication(
@@ -60,15 +53,25 @@ rejectApplication(
   reason: string
 ) {
 
-  return this.http.post(
-    `${this.apiUrl}/${id}/decision`,
-    {
-      decision: 'REJECTED',
-      reason
-    },
-    {
-      withCredentials: true
-    }
+  return this.submitDecision(id, 'REJECTED', reason);
+}
+
+private submitDecision(
+  id: number,
+  decision: 'APPROVED' | 'REJECTED',
+  reason: string
+) {
+  return this.authService.getCsrfToken().pipe(
+    switchMap(({ token, headerName }) =>
+      this.http.post(
+        `${this.apiUrl}/${id}/decision`,
+        { decision, reason },
+        {
+          headers: new HttpHeaders().set(headerName, token),
+          withCredentials: true
+        }
+      )
+    )
   );
 }
 
