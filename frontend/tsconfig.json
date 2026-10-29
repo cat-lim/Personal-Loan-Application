@@ -26,6 +26,6 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true,
-    "_enabledBlockTypes": ["if", "for"]
+    // "_enabledBlockTypes": ["if", "for"]
   }
 }

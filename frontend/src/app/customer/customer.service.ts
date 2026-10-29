@@ -29,4 +29,11 @@ export class CustomerService {
       withCredentials: true,
     });
   }
+
+
+  getApplication(id: number): Observable<CustomerApplication> {
+    return this.http.get<CustomerApplication>(`${this.apiUrl}/${id}`, {
+      withCredentials: true,
+    });
+  }
 }
