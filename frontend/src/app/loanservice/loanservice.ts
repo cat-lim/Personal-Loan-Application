@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-import {Injectable} from '@angular/core';
-=======
 import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {inject, Injectable} from '@angular/core';
 import {Observable, switchMap, timeout} from 'rxjs';
@@ -23,13 +20,25 @@ export interface LoanSubmissionResponse {
   status: string;
   submittedAt: string;
 }
->>>>>>> 6c1e39a (Save T02)
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoanService {
 
+  private http = inject(HttpClient);
+
+  private apiUrl = '/api/loans';
+
+  getMyLoans(): Observable<LoanApplication[]> {
+    return this.http.get<LoanApplication[]>(`${this.apiUrl}/mine`,
+       { withCredentials: true });
+  }
+
+  getLoanByReference(reference: string): Observable<LoanApplication> {
+    return this.http.get<LoanApplication>(`${this.apiUrl}/reference/${encodeURIComponent(reference)}`,
+       { withCredentials: true });
+  }
   submitApplication(loanAmount: string, loanTerm: string, loanPurpose: string,
       employmentStatus: string, monthlyIncome: string) {
     console.log(
