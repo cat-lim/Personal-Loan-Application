@@ -4,32 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4a8ae9bf-33ca-4f5d-952a-e0cf4bbd4c1c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/controller/CustomerApplicationController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/controller/OfficerApplicationController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/decision/controller/DecisionController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/decision/dto/DecisionRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/decision/dto/DecisionResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/decision/model/Decision.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/decision/service/DecisionService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/dto/CustomerApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/dto/OfficerApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/service/CustomerApplicationService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/service/OfficerApplicationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/personalLoanApp/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/backend/personalLoanApp/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/personalLoanApp/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/personalLoanApp/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/Controller/LoanSubmissionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/Controller/LoanSubmissionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/Security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/Security/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/Service/LoanSubmissionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/Service/LoanSubmissionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/Service/LoanSubmissionWrite.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/Service/LoanSubmissionWrite.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/dto/LoanSubmissionRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/dto/LoanSubmissionRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/personalLoanApp/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/personalLoanApp/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/officer/officer-home/officer-home.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/officer/officer-home/officer-home.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/officer/officer-review/officer-review.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/officer/officer-review/officer-review.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/officer/services/officer.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/officer/services/officer.service.ts" afterDir="false" />
-    </list>
+    <list default="true" id="4a8ae9bf-33ca-4f5d-952a-e0cf4bbd4c1c" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -85,7 +60,7 @@
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "Spring Boot.PersonalLoanAppApplication.executor": "Run",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "Merging t-03-officer-queue-and-decision-screens",
+    "git-widget-placeholder": "saparikh",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/saparikh/Downloads/Personal-Loan-Application",
     "node.js.detected.package.eslint": "true",
@@ -140,6 +115,12 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+    <option name="exactExcludedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/frontend/node_modules/piscina/test/fixtures/notify-then-sleep-or.js" />
+        <option value="$PROJECT_DIR$/frontend/node_modules/piscina/test/fixtures/wait-for-notify.js" />
+      </list>
+    </option>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
