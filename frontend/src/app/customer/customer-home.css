@@ -78,6 +78,15 @@ th {
   color: #b42318;
 }
 
+.success-message {
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  border: 1px solid #067647;
+  border-radius: 8px;
+  background: #ecfdf3;
+  color: #067647;
+}
+
 @media (max-width: 640px) {
   .customer-home {
     padding: 16px;

@@ -16,6 +16,10 @@ import {CustomerApplication, CustomerService} from './customer.service';
         <a class="primary-button" routerLink="/apply">Apply for a loan</a>
       </header>
 
+      @if (successMessage) {
+        <p class="success-message" role="status">{{ successMessage }}</p>
+      }
+
       @if (loading) {
         <p role="status">Loading your applications...</p>
       } @else if (errorMessage) {
@@ -71,8 +75,15 @@ export class CustomerHome implements OnInit {
   applications: CustomerApplication[] = [];
   loading = false;
   errorMessage = '';
+  successMessage = '';
 
   ngOnInit(): void {
+    const applicationReference: unknown = history.state?.applicationReference;
+    if (typeof applicationReference === 'string' && applicationReference.length > 0) {
+      this.successMessage =
+        `Your loan application was submitted successfully. Reference: ${applicationReference}`;
+    }
+
     this.loadApplications();
   }
 

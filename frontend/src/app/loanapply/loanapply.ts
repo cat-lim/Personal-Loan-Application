@@ -1,8 +1,9 @@
 import {Component, inject} from '@angular/core';
-import {EmploymentStatus, LoanSubmissionResponse, LoanService} from '../loanservice/loanservice';
+import {EmploymentStatus, LoanService} from '../loanservice/loanservice';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {HttpErrorResponse} from '@angular/common/http';
 import {finalize, TimeoutError} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-loanapplication',
@@ -88,14 +89,8 @@ import {finalize, TimeoutError} from 'rxjs';
             <p class="form-error" role="alert">{{ submissionError }}</p>
           }
 
-          @if (submissionResult) {
-            <p class="form-success" role="status">
-              Application submitted successfully. Reference: {{ submissionResult.reference }}
-            </p>
-          }
-
-          <button type="submit" [disabled]="submissionPending">
-            {{ submissionPending ? 'Submitting...' : 'Submit Application' }}
+          <button type="submit" [disabled]="submissionPending || applicationSubmitted">
+            {{ submissionPending ? 'Submitting...' : applicationSubmitted ? 'Application submitted' : 'Submit Application' }}
           </button>
         </form>
       </section>
@@ -105,6 +100,7 @@ import {finalize, TimeoutError} from 'rxjs';
 
 export class LoanApplication {
   loanService = inject(LoanService);
+  private readonly router = inject(Router);
   applyForm = new FormGroup({
     loanAmount: new FormControl('', [
       Validators.required,
@@ -122,8 +118,8 @@ export class LoanApplication {
   });
   submitted = false;
   submissionPending = false;
+  applicationSubmitted = false;
   submissionError = '';
-  submissionResult: LoanSubmissionResponse | null = null;
 
   showControlError(control: FormControl): boolean {
     return control.invalid && (control.touched || this.submitted);
@@ -133,13 +129,12 @@ export class LoanApplication {
     this.submitted = true;
     this.applyForm.markAllAsTouched();
 
-    if (this.applyForm.invalid) {
+    if (this.applyForm.invalid || this.submissionPending || this.applicationSubmitted) {
       return;
     }
 
     this.submissionPending = true;
     this.submissionError = '';
-    this.submissionResult = null;
 
     this.loanService.submitApplication({
       amount: Number(this.applyForm.value.loanAmount),
@@ -152,7 +147,10 @@ export class LoanApplication {
     })).subscribe({
       next: (response) => {
         this.submissionPending = false;
-        this.submissionResult = response;
+        this.applicationSubmitted = true;
+        void this.router.navigate(['/customer/home'], {
+          state: {applicationReference: response.reference},
+        });
       },
       error: (error: HttpErrorResponse | TimeoutError) => {
         if (error instanceof TimeoutError) {
