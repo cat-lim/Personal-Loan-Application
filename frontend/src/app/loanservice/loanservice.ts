@@ -27,7 +27,7 @@ export interface LoanSubmissionResponse {
 export class LoanService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
-  private readonly apiUrl = 'http://localhost:8081/api/loans';
+  private readonly apiUrl = 'http://localhost:8080/api/loans';
 
   submitApplication(request: LoanSubmissionRequest): Observable<LoanSubmissionResponse> {
     return this.authService.getCsrfToken().pipe(
