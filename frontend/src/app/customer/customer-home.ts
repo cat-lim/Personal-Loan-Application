@@ -36,7 +36,7 @@ import {CustomerApplication, CustomerService} from './customer.service';
           <table>
             <thead>
               <tr>
-                <th scope="col">Reference</th>
+                <th scope="col">Reference No.</th>
                 <th scope="col">Amount</th>
                 <th scope="col">Term</th>
                 <th scope="col">Purpose</th>
@@ -52,7 +52,14 @@ import {CustomerApplication, CustomerService} from './customer.service';
                   <td>{{ application.loanAmount | currency }}</td>
                   <td>{{ application.termMonths }} months</td>
                   <td>{{ application.purpose }}</td>
-                  <td><span class="status">{{ application.status }}</span></td>
+                  <td>
+                    <span
+                      class="status"
+                      [class.status-approved]="application.status === 'APPROVED'"
+                      [class.status-rejected]="application.status === 'REJECTED'">
+                      {{ application.status }}
+                    </span>
+                  </td>
                   <td>{{ application.submittedAt | date:'short' }}</td>
                   <td>
                     <a

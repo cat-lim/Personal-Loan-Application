@@ -27,7 +27,7 @@
       <table>
         <thead>
           <tr>
-            <th scope="col">Reference</th>
+            <th scope="col">Reference No.</th>
             <th scope="col">Applicant</th>
             <th scope="col">Amount</th>
             <th scope="col">Term</th>
@@ -43,7 +43,14 @@
             <td>{{ app.loanAmount | currency }}</td>
             <td>{{ app.termMonths }} months</td>
             <td>{{ app.purpose }}</td>
-            <td><span class="status">{{ app.status }}</span></td>
+            <td>
+              <span
+                class="status"
+                [class.status-approved]="app.status === 'APPROVED'"
+                [class.status-rejected]="app.status === 'REJECTED'">
+                {{ app.status }}
+              </span>
+            </td>
             <td>
               <button
                 type="button"

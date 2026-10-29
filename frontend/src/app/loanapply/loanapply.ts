@@ -3,7 +3,7 @@ import {EmploymentStatus, LoanService} from '../loanservice/loanservice';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {HttpErrorResponse} from '@angular/common/http';
 import {finalize, TimeoutError} from 'rxjs';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 
 interface SubmissionErrorBody {
   message?: unknown;
@@ -21,9 +21,10 @@ const validationFieldLabels: Record<string, string> = {
 
 @Component({
   selector: 'app-loanapplication',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   template: `
       <section class="listing-apply">
+        <a class="back-button" routerLink="/customer/home">Back to applications</a>
         <h2 class="section-heading">Apply for a personal loan</h2>
 
         <form [formGroup]="applyForm" (ngSubmit)="submitApplication()">
@@ -103,9 +104,15 @@ const validationFieldLabels: Record<string, string> = {
             <p class="form-error" role="alert">{{ submissionError }}</p>
           }
 
-          <button type="submit" [disabled]="submissionPending || applicationSubmitted">
-            {{ submissionPending ? 'Submitting...' : applicationSubmitted ? 'Application submitted' : 'Submit Application' }}
-          </button>
+          <div class="form-actions">
+            <button type="button" class="cancel-button" routerLink="/customer/home"
+              [disabled]="submissionPending || applicationSubmitted">
+              Cancel
+            </button>
+            <button type="submit" [disabled]="submissionPending || applicationSubmitted">
+              {{ submissionPending ? 'Submitting...' : applicationSubmitted ? 'Application submitted' : 'Submit Application' }}
+            </button>
+          </div>
         </form>
       </section>
   `,

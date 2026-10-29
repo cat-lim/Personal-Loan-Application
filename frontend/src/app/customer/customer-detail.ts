@@ -30,7 +30,12 @@ import{
                 <p>Reference {{loan.reference}}</p>
                 <p class="submitted-date">Submitted {{loan.submittedAt | date: 'medium'}}</p>
             </div>
-            <span class="status">{{loan.status}}</span>
+            <span
+                class="status"
+                [class.status-approved]="loan.status === 'APPROVED'"
+                [class.status-rejected]="loan.status === 'REJECTED'">
+                {{loan.status}}
+            </span>
          </header>
 
          <section class="application-details">
