@@ -42,8 +42,7 @@ import {CustomerApplication, CustomerService} from './customer.service';
                 <th scope="col">Purpose</th>
                 <th scope="col">Status</th>
                 <th scope="col">Submitted</th>
-                <th scope="col">Decision note</th>
-                <th scope="col">Actions</th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -55,9 +54,13 @@ import {CustomerApplication, CustomerService} from './customer.service';
                   <td>{{ application.purpose }}</td>
                   <td><span class="status">{{ application.status }}</span></td>
                   <td>{{ application.submittedAt | date:'short' }}</td>
-                  <td>{{ application.decisionNote || '—' }}</td>
                   <td>
-                    <a [routerLink]= "['/customer/applications', application.id]">View details</a> </td>
+                    <a
+                      class="primary-button"
+                      [routerLink]="['/customer/applications', application.id]">
+                      View details
+                    </a>
+                  </td>
                 </tr>
               }
             </tbody>
