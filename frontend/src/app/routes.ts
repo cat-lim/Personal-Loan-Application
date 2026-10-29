@@ -7,9 +7,11 @@ import {LoanApplication} from './loanapply/loanapply';
 import {AuthService} from './authservice/authservice';
 import {OfficerQueueComponent} from './officer/officer-home/officer-home';
 import {OfficerReviewComponent} from './officer/officer-review/officer-review';
-import { OfficerLogin } from './officer/officer-login/officer-login';
+import {OfficerLogin} from './officer/officer-login/officer-login';
 import {CustomerHome} from './customer/customer-home';
-import { CustomerDetailComponent } from './customer/customer-detail';
+import {CustomerDetailComponent} from './customer/customer-detail';
+import {officerAuthGuard} from './guards/officer-auth.guard';
+import {Unauthorized} from './pages/unauthorized';
 
 const customerAuthGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
@@ -52,18 +54,31 @@ const routeConfig: Routes = [
   {
     path: 'officer/queue',
     component: OfficerQueueComponent,
+    canActivate: [officerAuthGuard],
     title: 'Officer application queue',
   },
   {
     path: 'officer/applications/:id',
     component: OfficerReviewComponent,
+    canActivate: [officerAuthGuard],
     title: 'Review loan application',
+  },
+  {
+    path: 'officer',
+    component: OfficerQueueComponent,
+    canActivate: [officerAuthGuard],
+    title: 'Officer Dashboard',
   },
   {
     path: 'customer/applications/:id',
     component: CustomerDetailComponent,
     canActivate: [customerAuthGuard],
     title: 'Customer application details',
+  },
+  {
+    path: 'unauthorized',
+    component: Unauthorized,
+    title: 'Unauthorized',
   },
   {
     path: '**',
