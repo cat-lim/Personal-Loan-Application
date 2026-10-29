@@ -14,7 +14,8 @@ import {
 
 import {
   ActivatedRoute,
-  Router
+  Router,
+  RouterLink
 } from '@angular/router';
 
 import { OfficerService } from '../services/officer.service';
@@ -28,7 +29,8 @@ import type {
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLink
   ],
   templateUrl: './officer-review.html',
   styleUrls: ['./officer-review.css']
@@ -73,20 +75,10 @@ export class OfficerReviewComponent
 
     this.loading = true;
 
-    console.log(
-      'Loading application:',
-      id
-    );
-
     this.officerService
       .getApplication(id)
       .subscribe({
         next: (response) => {
-
-          console.log(
-            'APPLICATION RESPONSE',
-            response
-          );
 
           this.application = response;
 
@@ -129,21 +121,6 @@ export class OfficerReviewComponent
       return;
     }
 
-    console.log(
-      'APPLICATION:',
-      application
-    );
-
-    console.log(
-      'DECISION:',
-      this.decision
-    );
-
-    console.log(
-      'REASON:',
-      this.reason
-    );
-
     this.saving = true;
 
     const request =
@@ -182,10 +159,6 @@ export class OfficerReviewComponent
       },
 
       error: (error) => {
-
-        console.log(
-          'DECISION ERROR'
-        );
 
         console.error(error);
 
