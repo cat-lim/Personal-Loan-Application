@@ -15,7 +15,6 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
           @if (showCustomerNavigation) {
             <a class="header-link" routerLink="/customer/home" routerLinkActive="active"
               [routerLinkActiveOptions]="{exact: true}">My applications</a>
-            <a class="header-link" routerLink="/apply" routerLinkActive="active">Apply for a loan</a>
           }
           @if (showSignOut) {
             <button class="sign-out-button" type="button" [disabled]="signingOut" (click)="signOut()">
