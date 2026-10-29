@@ -4,6 +4,22 @@
   padding: 24px;
 }
 
+.secondary-button,
+.primary-button {
+  display: inline-block;
+  padding: 10px 14px;
+  border: 1px solid var(--primary-color);
+  border-radius: 8px;
+  font: inherit;
+}
+
+.secondary-button {
+  margin-bottom: 16px;
+  background: white;
+  color: var(--primary-color);
+  cursor: pointer;
+}
+
 .page-header {
   display: flex;
   align-items: center;
@@ -15,6 +31,10 @@
 .page-header p {
   margin-top: 8px;
   color: #555;
+}
+
+.page-header .submitted-date {
+  font-size: 0.75rem;
 }
 
 .application-details,
@@ -98,14 +118,14 @@ textarea:focus,
 }
 
 .primary-button {
-  display: inline-block;
-  padding: 10px 14px;
-  border: 1px solid var(--primary-color);
-  border-radius: 8px;
   background: var(--primary-color);
   color: white;
   cursor: pointer;
-  font: inherit;
+}
+
+.decision-actions {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .primary-button:disabled {
