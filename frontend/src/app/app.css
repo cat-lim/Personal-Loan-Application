@@ -31,7 +31,7 @@
   gap: 12px;
 }
 
-.home-link {
+.header-link {
   display: inline-flex;
   min-height: 42px;
   align-items: center;
@@ -46,19 +46,16 @@
   transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
 }
 
-.home-link:hover {
+.header-link:hover,
+.header-link.active {
   border-color: #dedcf8;
   background: #f5f4ff;
   color: #4d4ab0;
 }
 
-.home-link:focus-visible {
-  outline: 3px solid rgb(96 93 200 / 30%);
-  outline-offset: 3px;
-}
-
 .brand-name:focus-visible,
-.sign-out-button:focus-visible {
+.sign-out-button:focus-visible,
+.header-link:focus-visible {
   outline: 3px solid rgb(96 93 200 / 30%);
   outline-offset: 3px;
 }
@@ -100,7 +97,7 @@
     font-size: 20px;
   }
 
-  .home-link {
+  .header-link {
     min-height: 40px;
     padding: 0 14px;
   }

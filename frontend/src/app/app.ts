@@ -1,17 +1,22 @@
 import {Component, DestroyRef, inject} from '@angular/core';
-import {Router, RouterLink, RouterOutlet, NavigationEnd} from '@angular/router';
+import {NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {AuthService} from './authservice/authservice';
 import {filter} from 'rxjs';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
   template: ` 
     <main>
       <header class="site-header">
         <a class="brand-name" [routerLink]="homeRoute" aria-label="Northstar home">Northstar</a>
         <nav aria-label="Main navigation">
+          @if (showCustomerNavigation) {
+            <a class="header-link" routerLink="/customer/home" routerLinkActive="active"
+              [routerLinkActiveOptions]="{exact: true}">My applications</a>
+            <a class="header-link" routerLink="/apply" routerLinkActive="active">Apply for a loan</a>
+          }
           @if (showSignOut) {
             <button class="sign-out-button" type="button" [disabled]="signingOut" (click)="signOut()">
               {{ signingOut ? 'Signing out...' : 'Sign out' }}
@@ -61,7 +66,15 @@ export class App {
   }
 
   get showSignOut(): boolean {
-    return this.currentUrl === '/customer/home' || this.currentUrl === '/officer/queue';
+    return this.currentUrl === '/apply' ||
+      this.currentUrl.startsWith('/customer/') ||
+      this.currentUrl.startsWith('/officer/');
+  }
+
+  get showCustomerNavigation(): boolean {
+    return this.currentUrl === '/customer/home' ||
+      this.currentUrl === '/apply' ||
+      this.currentUrl.startsWith('/customer/applications/');
   }
 
   signOut(): void {
