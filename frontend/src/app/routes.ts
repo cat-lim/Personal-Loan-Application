@@ -10,7 +10,7 @@ import {OfficerReviewComponent} from './officer/officer-review/officer-review';
 import {OfficerLogin} from './officer/officer-login/officer-login';
 import {CustomerHome} from './customer/customer-home';
 import {CustomerDetailComponent} from './customer/customer-detail';
-import {OfficerAuthGuard} from './guards/officer-auth.guard';
+import {officerAuthGuard} from './guards/officer-auth.guard';
 import {Unauthorized} from './pages/unauthorized';
 
 const customerAuthGuard: CanActivateFn = () => {
@@ -54,19 +54,19 @@ const routeConfig: Routes = [
   {
     path: 'officer/queue',
     component: OfficerQueueComponent,
-    canActivate: [OfficerAuthGuard],
+    canActivate: [officerAuthGuard],
     title: 'Officer application queue',
   },
   {
     path: 'officer/applications/:id',
     component: OfficerReviewComponent,
-    canActivate: [OfficerAuthGuard],
+    canActivate: [officerAuthGuard],
     title: 'Review loan application',
   },
   {
     path: 'officer',
     component: OfficerQueueComponent,
-    canActivate: [OfficerAuthGuard],
+    canActivate: [officerAuthGuard],
     title: 'Officer Dashboard',
   },
   {
