@@ -50,6 +50,12 @@ import{
             }
 
         </div>
+        } @else {
+            <section class="empty-state" role="status">
+                <h2>Application details unavailable</h2>
+                <p>No application details were returned. It may no longer be available.</p>
+                <button type="button" (click)="loadApplication()">Try again</button>
+            </section>
         }
      </section>
      `,
@@ -70,6 +76,17 @@ import{
 
         .details-card p{
             margin: 14px 0;
+        }
+
+        .empty-state {
+            margin-top: 20px;
+            padding: 24px;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+        }
+
+        .empty-state p {
+            margin: 12px 0;
         }
 
         button{
@@ -96,20 +113,28 @@ export class CustomerDetailComponent implements OnInit {
         const id = Number(this.route.snapshot.paramMap.get('id'));
         if (!Number.isInteger(id) || id <= 0) {
             this.errorMessage = 'Invalid Application ID';
+            this.application = null;
             this.loading = false;
             return;
         }
 
+        this.application = null;
         this.loading = true; 
         this.errorMessage = '';
 
         this.customerService.getApplication(id).subscribe({
             next: (application) => {
-                this.application = application;
                 this.loading = false;
+                if (!application) {
+                    this.errorMessage = 'No application details were returned. It may no longer be available.';
+                    return;
+                }
+
+                this.application = application;
             },
             error: (error: HttpErrorResponse) => {
                 this.loading = false;
+                this.application = null;
 
                 if (error.status === 404) {
                     this.errorMessage = 'Application not found';
