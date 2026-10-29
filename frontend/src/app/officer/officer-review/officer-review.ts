@@ -31,7 +31,7 @@ import type {
     ReactiveFormsModule
   ],
   templateUrl: './officer-review.html',
-  styleUrls: []
+  styleUrls: ['./officer-review.css']
 })
 export class OfficerReviewComponent
   implements OnInit {

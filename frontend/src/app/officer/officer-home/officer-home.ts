@@ -10,7 +10,7 @@ import type { OfficerApplication } from '../models/officer-application.model';
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './officer-home.html',
-  styleUrls: []
+  styleUrls: ['./officer-home.css']
 })
 export class OfficerQueueComponent implements OnInit {
   timestamp = Date.now();
@@ -42,40 +42,23 @@ export class OfficerQueueComponent implements OnInit {
   }
 
   loadQueue(): void {
+    this.loading = true;
+    this.errorMessage = '';
 
-  console.log('loadQueue called');
-
-  this.loading = true;
-
-  this.officerService
-    .getPendingQueue()
-    .subscribe({
-      next: (response) => {
-
-  console.log('NEXT HIT');
-
-  this.applications = response;
-
-  this.loading = false;
-
-  this.cdr.detectChanges();
-
-  console.log(
-    'Applications assigned:',
-    this.applications.length
-  );
-
-  console.log(
-    'Loading after assignment:',
-    this.loading
-  );
-},
-      error: (error) => {
-
-        console.error(error);
-
-        this.loading = false;
-      }
-    });
-}
+    this.officerService
+      .getPendingQueue()
+      .subscribe({
+        next: (response) => {
+          this.applications = response;
+          this.loading = false;
+          this.cdr.detectChanges();
+        },
+        error: (error) => {
+          console.error(error);
+          this.errorMessage = 'Unable to load pending applications. Please try again.';
+          this.loading = false;
+          this.cdr.detectChanges();
+        }
+      });
+  }
 }
