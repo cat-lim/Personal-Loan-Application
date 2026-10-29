@@ -1,131 +1,90 @@
-<div *ngIf="application">
-
-  <h2>Review Application</h2>
-
-  <hr>
-
-  <p>
-    <strong>Reference:</strong>
-    {{ application.reference }}
-  </p>
-
-  <p>
-    <strong>Applicant Name:</strong>
-    {{ application.applicantName }}
-  </p>
-
-  <p>
-    <strong>Username:</strong>
-    {{ application.applicantUsername }}
-  </p>
-
-  <p>
-    <strong>Loan Amount:</strong>
-    {{ application.loanAmount | currency }}
-  </p>
-
-  <p>
-    <strong>Term:</strong>
-    {{ application.termMonths }} months
-  </p>
-
-  <p>
-    <strong>Purpose:</strong>
-    {{ application.purpose }}
-  </p>
-
-  <p>
-    <strong>Employment Status:</strong>
-    {{ application.employmentStatus }}
-  </p>
-
-  <p>
-    <strong>Monthly Income:</strong>
-    {{ application.monthlyIncome | currency }}
-  </p>
-
-  <p>
-    <strong>Status:</strong>
-    {{ application.status }}
-  </p>
-
-  <p>
-    <strong>Submitted:</strong>
-    {{ application.submittedAt | date:'medium' }}
-  </p>
-
-  <hr>
-
-  <form [formGroup]="decisionForm">
-
-    <h3>Decision</h3>
-
-    <label>
-      <input
-        type="radio"
-        value="APPROVED"
-        formControlName="decision">
-      Approve
-    </label>
-
-    <br><br>
-
-    <label>
-      <input
-        type="radio"
-        value="REJECTED"
-        formControlName="decision">
-      Reject
-    </label>
-
-    <br><br>
-
-    <label for="reason">
-      Reason
-    </label>
-
-    <br>
-
-    <textarea
-      id="reason"
-      rows="5"
-      cols="50"
-      formControlName="reason">
-    </textarea>
-
-  </form>
-
-  <br>
-
-  <div
-    *ngIf="rejectionError"
-    style="color:red">
-    {{ rejectionError }}
-  </div>
-
-  <div
-    *ngIf="errorMessage"
-    style="color:red">
+<section class="officer-review">
+  <p *ngIf="loading" role="status">Loading application...</p>
+  <p *ngIf="errorMessage && !application" class="error-message" role="alert">
     {{ errorMessage }}
-  </div>
+  </p>
 
-  <div
-    *ngIf="conflictMessage"
-    style="color:red">
-    {{ conflictMessage }}
-  </div>
+  <ng-container *ngIf="application">
+    <header class="page-header">
+      <div>
+        <h1>Review Application</h1>
+        <p>Reference {{ application.reference }}</p>
+      </div>
+      <span class="status">{{ application.status }}</span>
+    </header>
 
-  <button
-    type="button"
-    (click)="submitDecision()"
-    [disabled]="saving">
+    <section class="application-details">
+      <h2>Application details</h2>
+      <dl class="details-grid">
+        <div class="detail-item">
+          <dt>Applicant Name</dt>
+          <dd>{{ application.applicantName }}</dd>
+        </div>
+        <div class="detail-item">
+          <dt>Username</dt>
+          <dd>{{ application.applicantUsername }}</dd>
+        </div>
+        <div class="detail-item">
+          <dt>Loan Amount</dt>
+          <dd>{{ application.loanAmount | currency }}</dd>
+        </div>
+        <div class="detail-item">
+          <dt>Term</dt>
+          <dd>{{ application.termMonths }} months</dd>
+        </div>
+        <div class="detail-item">
+          <dt>Purpose</dt>
+          <dd>{{ application.purpose }}</dd>
+        </div>
+        <div class="detail-item">
+          <dt>Employment Status</dt>
+          <dd>{{ application.employmentStatus }}</dd>
+        </div>
+        <div class="detail-item">
+          <dt>Monthly Income</dt>
+          <dd>{{ application.monthlyIncome | currency }}</dd>
+        </div>
+        <div class="detail-item">
+          <dt>Submitted</dt>
+          <dd>{{ application.submittedAt | date:'medium' }}</dd>
+        </div>
+      </dl>
+    </section>
 
-    Submit
+    <form class="decision-form" [formGroup]="decisionForm">
+      <h2>Decision</h2>
 
-  </button>
+      <fieldset class="decision-options">
+        <legend>Choose an outcome</legend>
+        <label class="decision-option">
+          <input type="radio" value="APPROVED" formControlName="decision">
+          <span>Approve</span>
+        </label>
+        <label class="decision-option">
+          <input type="radio" value="REJECTED" formControlName="decision">
+          <span>Reject</span>
+        </label>
+      </fieldset>
 
-  <div *ngIf="saving">
-    Saving...
-  </div>
+      <label class="reason-label" for="reason">Decision note or rejection reason</label>
+      <textarea
+        id="reason"
+        rows="5"
+        formControlName="reason"
+        placeholder="Add a note for the applicant">
+      </textarea>
+    </form>
 
-</div>
+    <p *ngIf="rejectionError" class="error-message" role="alert">{{ rejectionError }}</p>
+    <p *ngIf="errorMessage" class="error-message" role="alert">{{ errorMessage }}</p>
+    <p *ngIf="conflictMessage" class="error-message" role="alert">{{ conflictMessage }}</p>
+
+    <button
+      type="button"
+      class="primary-button"
+      (click)="submitDecision()"
+      [disabled]="saving">
+      {{ saving ? 'Submitting...' : 'Submit decision' }}
+    </button>
+  </ng-container>
+</section>

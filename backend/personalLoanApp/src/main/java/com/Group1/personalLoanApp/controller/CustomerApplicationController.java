@@ -1,7 +1,7 @@
-package com.Group1.personalLoanApp.controller;
+package com.Group1.personalLoanApp.Controller;
 
 import com.Group1.personalLoanApp.dto.CustomerApplication;
-import com.Group1.personalLoanApp.service.CustomerApplicationService;
+import com.Group1.personalLoanApp.Service.CustomerApplicationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;

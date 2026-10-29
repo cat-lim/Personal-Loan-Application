@@ -37,9 +37,10 @@ public interface LoanApplicationRepository extends JpaRepository<LoanApplication
         + "decided_by_officer_id = :officerId, decided_at = :decidedAt "
         + "WHERE id = :applicationId AND status = 'SUBMITTED' "
         + "AND :decision IN ('APPROVED', 'REJECTED') "
-        + "AND :officerId IS NOT NULL AND :decidedAt IS NOT NULL "
-        + "AND (:decisionNote IS NULL OR CHAR_LENGTH(:decisionNote) <= 1000) "
-        + "AND (:decision <> 'REJECTED' OR NULLIF(BTRIM(:decisionNote), '') IS NOT NULL)",
+        + "AND (CAST(:decisionNote AS varchar) IS NULL "
+        + "OR CHAR_LENGTH(CAST(:decisionNote AS varchar)) <= 1000) "
+        + "AND (:decision <> 'REJECTED' "
+        + "OR NULLIF(BTRIM(CAST(:decisionNote AS varchar)), '') IS NOT NULL)",
         nativeQuery = true)
     int decideIfSubmitted(@Param("applicationId") Long applicationId,
                           @Param("decision") String decision,

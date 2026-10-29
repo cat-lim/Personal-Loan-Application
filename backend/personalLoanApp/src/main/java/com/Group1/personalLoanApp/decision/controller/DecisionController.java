@@ -32,38 +32,72 @@ public class DecisionController {
         this.loanOfficerRepository = loanOfficerRepository;
     }
 
+//     @PostMapping("/{applicationId}/decision")
+//     @PreAuthorize("isAuthenticated() and hasRole('OFFICER')")
+//     public ResponseEntity<DecisionResponse> decide(
+//             @PathVariable Long applicationId,
+//             @Valid @RequestBody DecisionRequest request,
+//             Authentication authentication) {
+        
+//         if (authentication == null
+//                 || authentication instanceof AnonymousAuthenticationToken) {
+//             throw new ResponseStatusException(
+//                     HttpStatus.UNAUTHORIZED,
+//                     "Authentication is required."
+//             );
+//         }
+
+//         String username = authentication.getName()
+//                 .trim()
+//                 .toLowerCase(Locale.ROOT);
+
+//         LoanOfficer officer = loanOfficerRepository
+//                 .findByUsername(username)
+//                 .orElseThrow(() -> new ResponseStatusException(
+//                         HttpStatus.FORBIDDEN,
+//                         "The authenticated user is not a registered officer."
+//                 ));
+
+//         DecisionResponse response = service.decide(
+//                 applicationId,
+//                 request,
+//                 officer.getId()
+//         );
+
+//         return ResponseEntity.ok(response);
+//     }
+
     @PostMapping("/{applicationId}/decision")
-    @PreAuthorize("isAuthenticated() and hasRole('OFFICER')")
-    public ResponseEntity<DecisionResponse> decide(
-            @PathVariable Long applicationId,
-            @Valid @RequestBody DecisionRequest request,
-            Authentication authentication) {
+// @PreAuthorize("isAuthenticated() and hasRole('OFFICER')")
+public ResponseEntity<DecisionResponse> decide(
+        @PathVariable Long applicationId,
+        @Valid @RequestBody DecisionRequest request,
+        Authentication authentication) {
 
-        if (authentication == null
-                || authentication instanceof AnonymousAuthenticationToken) {
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED,
-                    "Authentication is required."
-            );
-        }
+    System.out.println("DECISION ENDPOINT HIT");
 
-        String username = authentication.getName()
-                .trim()
-                .toLowerCase(Locale.ROOT);
-
-        LoanOfficer officer = loanOfficerRepository
-                .findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.FORBIDDEN,
-                        "The authenticated user is not a registered officer."
-                ));
-
-        DecisionResponse response = service.decide(
-                applicationId,
-                request,
-                officer.getId()
-        );
-
-        return ResponseEntity.ok(response);
+    if (authentication != null) {
+        System.out.println("USERNAME: " + authentication.getName());
+        System.out.println("AUTHORITIES: "
+                + authentication.getAuthorities());
     }
+
+    LoanOfficer officer = loanOfficerRepository
+            .findByUsername(
+                    authentication.getName()
+                            .trim()
+                            .toLowerCase(Locale.ROOT))
+            .orElseThrow(() -> new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "The authenticated user is not a registered officer."
+            ));
+
+    DecisionResponse response = service.decide(
+            applicationId,
+            request,
+            officer.getId()
+    );
+
+    return ResponseEntity.ok(response);
+}
 }

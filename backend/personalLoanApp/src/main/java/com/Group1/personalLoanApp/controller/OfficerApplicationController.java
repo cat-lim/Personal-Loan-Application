@@ -1,7 +1,7 @@
-package com.Group1.personalLoanApp.controller;
+package com.Group1.personalLoanApp.Controller;
 
 import com.Group1.personalLoanApp.dto.OfficerApplication;
-import com.Group1.personalLoanApp.service.OfficerApplicationService;
+import com.Group1.personalLoanApp.Service.OfficerApplicationService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,4 +1,4 @@
-package com.Group1.personalLoanApp.controller;
+package com.Group1.personalLoanApp.Controller;
 import com.Group1.personalLoanApp.repository.*;
 
 import jakarta.servlet.http.*;

@@ -1,8 +1,8 @@
-package com.Group1.personalLoanApp.controller;
+package com.Group1.personalLoanApp.Controller;
 
 import com.Group1.personalLoanApp.dto.LoanSubmissionRequest;
 import com.Group1.personalLoanApp.dto.LoanSubmissionResponse;
-import com.Group1.personalLoanApp.service.LoanSubmissionService;
+import com.Group1.personalLoanApp.Service.LoanSubmissionService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;

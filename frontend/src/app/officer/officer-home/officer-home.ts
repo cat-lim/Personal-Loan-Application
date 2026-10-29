@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { OfficerService } from '../services/officer.service';
 import type { OfficerApplication } from '../models/officer-application.model';
@@ -10,9 +10,11 @@ import type { OfficerApplication } from '../models/officer-application.model';
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './officer-home.html',
-  styleUrls: []
+  styleUrls: ['./officer-home.css']
 })
 export class OfficerQueueComponent implements OnInit {
+  timestamp = Date.now();
+  randomId = Math.floor(Math.random() * 100000);
 
   applications: OfficerApplication[] = [];
 
@@ -22,78 +24,41 @@ export class OfficerQueueComponent implements OnInit {
 
   constructor(
     private officerService: OfficerService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {console.log('QUEUE CONSTRUCTOR');}
+
 
   ngOnInit(): void {
+    console.log('QUEUE INIT');
 
     const state = history.state;
 
-    if (state && state.successMessage) {
+    if (state?.successMessage) {
       this.successMessage = state.successMessage;
     }
-    console.log(history.state);
+
     this.loadQueue();
   }
 
   loadQueue(): void {
+    this.loading = true;
+    this.errorMessage = '';
 
-  this.loading = false;
-
-  this.applications = [
-  {
-    id: 1,
-    reference: 'PL-001',
-    applicantName: 'John Smith',
-    applicantUsername: 'jsmith',
-    loanAmount: 15000,
-    termMonths: 24,
-    purpose: 'Debt Consolidation',
-    employmentStatus: 'FULL_TIME',
-    monthlyIncome: 5000,
-    status: 'SUBMITTED',
-    submittedAt: new Date().toISOString(),
-    decisionNote: null,
-    decidedAt: null,
-    decisionOfficerName: null
-  },
-  {
-    id: 2,
-    reference: 'PL-002',
-    applicantName: 'Sarah Johnson',
-    applicantUsername: 'sjohnson',
-    loanAmount: 25000,
-    termMonths: 36,
-    purpose: 'Home Improvement',
-    employmentStatus: 'FULL_TIME',
-    monthlyIncome: 7200,
-    status: 'SUBMITTED',
-    submittedAt: new Date().toISOString(),
-    decisionNote: null,
-    decidedAt: null,
-    decisionOfficerName: null
+    this.officerService
+      .getPendingQueue()
+      .subscribe({
+        next: (response) => {
+          this.applications = response;
+          this.loading = false;
+          this.cdr.detectChanges();
+        },
+        error: (error) => {
+          console.error(error);
+          this.errorMessage = 'Unable to load pending applications. Please try again.';
+          this.loading = false;
+          this.cdr.detectChanges();
+        }
+      });
   }
-];
-}
-
-  // loadQueue(): void {
-  //   this.loading = true;
-  //   this.errorMessage = '';
-
-  //   this.officerService.getPendingQueue().subscribe({
-  //     next: (response) => {
-  //       console.log('QUEUE RESPONSE: ', response);
-
-  //       this.applications = response;
-  //       this.loading = false;
-  //     },
-  //     error: (error) => {
-  //       console.error('QUEUE ERROR: ', error);
-
-  //       this.loading = false;
-  //       this.errorMessage =
-  //         'Unable to load pending applications.';
-  //     }
-  //   });
-  // }
 }

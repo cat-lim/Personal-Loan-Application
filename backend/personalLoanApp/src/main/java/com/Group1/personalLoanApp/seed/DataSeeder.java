@@ -26,7 +26,10 @@ import java.util.UUID;
  * Loads fictional data from src/main/resources/seed/seed-data.json when the app starts.
  * Does nothing if the customer table already has rows.
  *
+<<<<<<< HEAD
+=======
  * Seed passwords are BCrypt-hashed. Existing plain-text seed records are upgraded in place.
+>>>>>>> origin/main
  */
 @Component
 public class DataSeeder implements CommandLineRunner {
