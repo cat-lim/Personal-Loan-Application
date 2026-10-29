@@ -18,7 +18,12 @@
         <p>Reference {{ application.reference }}</p>
         <p class="submitted-date">Submitted {{ application.submittedAt | date:'medium' }}</p>
       </div>
-      <span class="status">{{ application.status }}</span>
+      <span
+        class="status"
+        [class.status-approved]="application.status === 'APPROVED'"
+        [class.status-rejected]="application.status === 'REJECTED'">
+        {{ application.status }}
+      </span>
     </header>
 
     <section class="application-details">

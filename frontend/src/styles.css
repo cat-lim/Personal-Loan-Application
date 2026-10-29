@@ -21,3 +21,27 @@ button.primary {
   color: white;
   border-radius: 8px;
 }
+
+.status {
+  display: inline-block;
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: #e8e7fa;
+  color: #4f4ca8;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status.status-approved {
+  border-color: #b7dfc8;
+  background: #e8f5ed;
+  color: #216944;
+}
+
+.status.status-rejected {
+  border-color: #edc0c3;
+  background: #fbecee;
+  color: #9c3d4a;
+}

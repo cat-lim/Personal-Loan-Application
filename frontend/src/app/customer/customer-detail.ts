@@ -14,52 +14,86 @@ import{
     imports: [CurrencyPipe, DatePipe, RouterLink],
     template:`
       <section class="customer-detail">
-        <a routerLink='/customer/home'>
+        <a class="secondary-button" routerLink="/customer/home">
           Back to applications
         </a>
-
-        <h1> Loan Application Details </h1>
 
         @if (loading){
             <p role="status">Loading application...</p>
         } @else if (errorMessage) {
             <p role="alert">Error loading application: {{errorMessage}}</p>
-            <button (click)="loadApplication()">Retry</button>
+            <button type="button" class="secondary-button" (click)="loadApplication()">Retry</button>
         } @else if(application; as loan) {
-         <div class="details-card">
-            <p><strong>Reference:</strong> {{loan.reference}}</p>
-            <p><strong>Applicant:</strong> {{loan.applicantName}}</p>
-            <p><strong>Loan Amount:</strong> {{loan.loanAmount | currency}}</p>
-            <p><strong>Loan Term:</strong> {{loan.termMonths}} months</p>
-            <p><strong>Purpose:</strong> {{loan.purpose}}</p>
+         <header class="page-header">
+            <div>
+                <h1>Loan Application Details</h1>
+                <p>Reference {{loan.reference}}</p>
+                <p class="submitted-date">Submitted {{loan.submittedAt | date: 'medium'}}</p>
+            </div>
+            <span
+                class="status"
+                [class.status-approved]="loan.status === 'APPROVED'"
+                [class.status-rejected]="loan.status === 'REJECTED'">
+                {{loan.status}}
+            </span>
+         </header>
 
-            <p><strong>Employment:</strong> {{loan.employmentStatus}}</p>
-            <p><strong>Monthly Income:</strong> {{loan.monthlyIncome | currency}}</p>
-            <p><strong>Status:</strong> {{loan.status}}</p>
-            <p><strong>Submitted:</strong> {{loan.submittedAt | date: 'medium'}}</p>
+         <section class="application-details">
+            <h2>Application details</h2>
+            <dl class="details-grid">
+                <div class="detail-item">
+                    <dt>Applicant Name</dt>
+                    <dd>{{loan.applicantName}}</dd>
+                </div>
+                <div class="detail-item">
+                    <dt>Loan Amount</dt>
+                    <dd>{{loan.loanAmount | currency}}</dd>
+                </div>
+                <div class="detail-item">
+                    <dt>Term</dt>
+                    <dd>{{loan.termMonths}} months</dd>
+                </div>
+                <div class="detail-item">
+                    <dt>Purpose</dt>
+                    <dd>{{loan.purpose}}</dd>
+                </div>
+                <div class="detail-item">
+                    <dt>Employment Status</dt>
+                    <dd>{{loan.employmentStatus}}</dd>
+                </div>
+                <div class="detail-item">
+                    <dt>Monthly Income</dt>
+                    <dd>{{loan.monthlyIncome | currency}}</dd>
+                </div>
+                @if (loan.decisionNote) {
+                    <div class="detail-item">
+                        <dt>Decision Note</dt>
+                        <dd>{{loan.decisionNote}}</dd>
+                    </div>
+                }
+                @if (loan.decidedAt) {
+                    <div class="detail-item">
+                        <dt>Decision Date</dt>
+                        <dd>{{loan.decidedAt | date: 'medium'}}</dd>
+                    </div>
+                }
+                @if (loan.decisionOfficerName) {
+                    <div class="detail-item">
+                        <dt>Decision Officer</dt>
+                        <dd>{{loan.decisionOfficerName}}</dd>
+                    </div>
+                }
+            </dl>
+         </section>
 
-            @if (loan.decisionNote){
-                <p><strong>Decision Note:</strong> {{loan.decisionNote}}</p>
-            }
-            
-            @if (loan.decidedAt){
-                <p><strong>Decided At:</strong> {{loan.decidedAt | date: 'medium'}}</p>
-            }
-
-            @if (loan.decisionOfficerName){
-                <p><strong>Decision officer:</strong> {{loan.decisionOfficerName}}</p>
-            }
-            
             @if (loan.status === 'SUBMITTED'){
-                <p>Your application is pending review.</p>
+                <p class="pending-message" role="status">Your application is pending review.</p>
             }
-
-        </div>
         } @else {
             <section class="empty-state" role="status">
                 <h2>Application details unavailable</h2>
                 <p>No application details were returned. It may no longer be available.</p>
-                <button type="button" (click)="loadApplication()">Try again</button>
+                <button type="button" class="secondary-button" (click)="loadApplication()">Try again</button>
             </section>
         }
      </section>
@@ -67,36 +101,103 @@ import{
 
     styles: [`
         .customer-detail {
-            max-width: 760px;
-            margin: 30px auto;
-            padding: 20px;
-        }
-
-        .details-card {
+            max-width: 960px;
+            margin: 0 auto;
             padding: 24px;
-            border: 1px solid #ccc;
-            border-radius: 12px;
-           
         }
 
-        .details-card p{
-            margin: 14px 0;
+        .secondary-button,
+        .primary-button {
+            display: inline-block;
+            padding: 10px 14px;
+            border: 1px solid var(--primary-color);
+            border-radius: 8px;
+            font: inherit;
+            text-decoration: none;
         }
 
+        .secondary-button {
+            margin-bottom: 16px;
+            background: white;
+            color: var(--primary-color);
+            cursor: pointer;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .page-header p {
+            margin-top: 8px;
+            color: #555;
+        }
+
+        .submitted-date {
+            font-size: 0.75rem;
+        }
+
+        .application-details,
         .empty-state {
-            margin-top: 20px;
+            margin-bottom: 24px;
             padding: 24px;
-            border: 1px solid #ccc;
-            border-radius: 12px;
+            border: 1px solid var(--shadow-color);
+            border-radius: 8px;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .detail-item dt {
+            margin-bottom: 6px;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .detail-item dd {
+            overflow-wrap: anywhere;
+        }
+
+        .pending-message {
+            color: #555;
         }
 
         .empty-state p {
             margin: 12px 0;
         }
 
-        button{
-            padding: 10px 16px;
-            cursor: pointer;
+        .secondary-button:focus-visible,
+        .primary-button:focus-visible {
+            outline: 3px solid rgb(96 93 200 / 30%);
+            outline-offset: 2px;
+        }
+
+        @media (max-width: 640px) {
+            .customer-detail {
+                padding: 16px;
+            }
+
+            .page-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .application-details,
+            .empty-state {
+                padding: 18px;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
         }
     `]
 })

@@ -54,15 +54,6 @@ th {
   background: var(--accent-color);
 }
 
-.status {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 12px;
-  background: var(--accent-color);
-  color: var(--primary-color);
-  font-size: 0.9rem;
-}
-
 .empty-state {
   padding: 28px;
   border: 1px solid var(--shadow-color);
