@@ -3,7 +3,7 @@ import {inject, Injectable} from '@angular/core';
 import {Observable, switchMap, timeout} from 'rxjs';
 import {AuthService} from '../authservice/authservice';
 
-import {LoanApplication} from '../models/loan.model';
+// import {LoanApplication} from '../models/loan.model';
 
 export type EmploymentStatus = 'EMPLOYED' | 'SELF_EMPLOYED' | 'RETIRED' | 'OTHER';
 
