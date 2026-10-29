@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4a8ae9bf-33ca-4f5d-952a-e0cf4bbd4c1c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/seed/DataSeeder.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/seed/DataSeeder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/seed/SeedData.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/personalLoanApp/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/personalLoanApp/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/decision/controller/DecisionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/personalLoanApp/src/main/java/com/Group1/personalLoanApp/decision/controller/DecisionController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,11 +35,18 @@
       </MavenGeneralSettings>
     </option>
   </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0,
   &quot;fromUser&quot;: false
 }</component>
   <component name="ProjectId" id="3L3u75tKuASiqq3StQhhAa4uySr" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -52,12 +57,13 @@
     "Maven.personalLoanApp [compile].executor": "Run",
     "Maven.personalLoanApp [install].executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "Spring Boot.PersonalLoanAppApplication.executor": "Run",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "#2 on saparikh",
+    "git-widget-placeholder": "Alex",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/saparikh/Downloads/Personal-Loan-Application",
     "node.js.detected.package.eslint": "true",
@@ -95,8 +101,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-30f59d01ecdd-a203e0a19954-intellij.indexing.shared.core-IU-262.10968.63" />
-        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.10968.63" />
+        <option value="bundled-jdk-30f59d01ecdd-34e2839f716b-intellij.indexing.shared.core-IU-262.9437.185" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.9437.185" />
       </set>
     </attachedChunks>
   </component>
