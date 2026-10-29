@@ -103,25 +103,24 @@ export class CustomerDetailComponent implements OnInit {
         this.loading = true; 
         this.errorMessage = '';
 
-         this.customerService.getApplication(id).subscribe({
-            next: (data) => {
-                    this.application = data;
-                    this.loading = false;
-                },
-                error: (error: HttpErrorResponse) => {
-                    this.loading = false;
+        this.customerService.getApplication(id).subscribe({
+            next: (application) => {
+                this.application = application;
+                this.loading = false;
+            },
+            error: (error: HttpErrorResponse) => {
+                this.loading = false;
 
-                    if(error.status === 404){
-                        this.errorMessage = 'Application not found';
-                    } else if (error.status === 403) {
-                        this.errorMessage = 'You do not have permission to view this application';
-                    } else if (error.status === 401) {
-                        this.errorMessage = 'You are not authenticated';
-                    } else {    
-                        this.errorMessage = 'Unable to load details. Please try again.';
-                    }
+                if (error.status === 404) {
+                    this.errorMessage = 'Application not found';
+                } else if (error.status === 403) {
+                    this.errorMessage = 'You do not have permission to view this application';
+                } else if (error.status === 401) {
+                    this.errorMessage = 'You are not authenticated';
+                } else {
+                    this.errorMessage = 'Unable to load details. Please try again.';
                 }
-
-            });
-        } 
+            },
+        });
     }
+}

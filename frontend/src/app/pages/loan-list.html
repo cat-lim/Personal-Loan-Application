@@ -1,0 +1,20 @@
+
+
+<div class = "loan-container">
+    <h2> My Loans</h2>
+
+    <button (click)= "loadLoans()" [disabled]="loading">
+        Refresh
+    </button>
+
+    @if(loading){
+        <p>Loading Loan Applications...</p>
+    }
+
+    @else if (error) {
+        <p>Error loading Loan Applications: {{error}}</p>
+        <button (click)= "loadLoans()">
+            Retry
+        </button>
+    }
+</div>
