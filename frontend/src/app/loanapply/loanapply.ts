@@ -1,6 +1,8 @@
 import {Component, inject} from '@angular/core';
-import {LoanService} from '../loanservice/loanservice';
+import {EmploymentStatus, LoanSubmissionResponse, LoanService} from '../loanservice/loanservice';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {HttpErrorResponse} from '@angular/common/http';
+import {finalize, TimeoutError} from 'rxjs';
 
 @Component({
   selector: 'app-loanapplication',
@@ -51,10 +53,10 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 
           <label for="employment-status">Employment Status</label>
           <select id="employment-status" formControlName="employmentStatus" required>
-            <option value="employed">Employed</option>
-            <option value="self-employed">Self-Employed</option>
-            <option value="retired">Retired</option>
-            <option value="other">Other</option>
+            <option value="EMPLOYED">Employed</option>
+            <option value="SELF_EMPLOYED">Self-Employed</option>
+            <option value="RETIRED">Retired</option>
+            <option value="OTHER">Other</option>
           </select>
 
           <!-- Error message for employment status -->
@@ -82,7 +84,19 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/
             </p>
           }
 
-          <button type="submit">Submit Application</button>
+          @if (submissionError) {
+            <p class="form-error" role="alert">{{ submissionError }}</p>
+          }
+
+          @if (submissionResult) {
+            <p class="form-success" role="status">
+              Application submitted successfully. Reference: {{ submissionResult.reference }}
+            </p>
+          }
+
+          <button type="submit" [disabled]="submissionPending">
+            {{ submissionPending ? 'Submitting...' : 'Submit Application' }}
+          </button>
         </form>
       </section>
   `,
@@ -107,6 +121,9 @@ export class LoanApplication {
     ]),
   });
   submitted = false;
+  submissionPending = false;
+  submissionError = '';
+  submissionResult: LoanSubmissionResponse | null = null;
 
   showControlError(control: FormControl): boolean {
     return control.invalid && (control.touched || this.submitted);
@@ -120,13 +137,40 @@ export class LoanApplication {
       return;
     }
 
-    // In the case that the received values are null/undefined, this sets it to '' instead
-    this.loanService.submitApplication(
-      this.applyForm.value.loanAmount ?? '',
-      this.applyForm.value.loanTerm ?? '',
-      this.applyForm.value.loanPurpose ?? '',
-      this.applyForm.value.employmentStatus ?? '',
-      this.applyForm.value.monthlyIncome ?? ''
-    );
+    this.submissionPending = true;
+    this.submissionError = '';
+    this.submissionResult = null;
+
+    this.loanService.submitApplication({
+      amount: Number(this.applyForm.value.loanAmount),
+      termMonths: Number(this.applyForm.value.loanTerm),
+      purpose: this.applyForm.value.loanPurpose ?? '',
+      employmentStatus: this.applyForm.value.employmentStatus as EmploymentStatus,
+      monthlyIncome: Number(this.applyForm.value.monthlyIncome),
+    }).pipe(finalize(() => {
+      this.submissionPending = false;
+    })).subscribe({
+      next: (response) => {
+        this.submissionPending = false;
+        this.submissionResult = response;
+      },
+      error: (error: HttpErrorResponse | TimeoutError) => {
+        if (error instanceof TimeoutError) {
+          this.submissionError = 'The backend did not respond within 20 seconds. Please try again.';
+        } else if (error.status === 401) {
+          this.submissionError = 'Your login session expired. Please log in again.';
+        } else if (error.status === 403) {
+          this.submissionError = 'Only customer accounts can submit loan applications.';
+        } else if (error.status === 409) {
+          this.submissionError = 'This submission was retried with different information.';
+        } else if (error.status === 400) {
+          this.submissionError = 'The backend rejected the application. Please review all fields.';
+        } else if (error.status === 0) {
+          this.submissionError = 'Unable to reach the backend. Please ensure it is running.';
+        } else {
+          this.submissionError = 'The application could not be submitted. Please try again.';
+        }
+      },
+    });
   }
 }

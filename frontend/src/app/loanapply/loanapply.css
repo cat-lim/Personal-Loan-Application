@@ -1,5 +1,9 @@
 .form-error {
-      color: #b42318;
+  color: #b42318;
+}
+
+.form-success {
+  color: #067647;
 }
 
 .results {

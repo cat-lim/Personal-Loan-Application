@@ -25,13 +25,25 @@ export interface LoanSubmissionResponse {
   providedIn: 'root',
 })
 export class LoanService {
+  private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
+  private readonly apiUrl = 'http://localhost:8080/api/loans';
 
-  submitApplication(loanAmount: string, loanTerm: string, loanPurpose: string,
-      employmentStatus: string, monthlyIncome: string) {
-    console.log(
-      `Loan application received: loanAmount: ${loanAmount}, loanTerm: ${loanTerm}, ` +
-      `loanPurpose: ${loanPurpose}, employmentStatus: ${employmentStatus}, ` +
-      `monthlyIncome: ${monthlyIncome}.`,
+  submitApplication(request: LoanSubmissionRequest): Observable<LoanSubmissionResponse> {
+    return this.authService.getCsrfToken().pipe(
+      switchMap(({token, headerName}) =>
+        this.http.post<LoanSubmissionResponse>(
+          `${this.apiUrl}/submit`,
+          request,
+          {
+            headers: new HttpHeaders()
+              .set(headerName, token)
+              .set('Idempotency-key', crypto.randomUUID()),
+            withCredentials: true,
+          },
+        ),
+      ),
+      timeout(20_000),
     );
   }
 }

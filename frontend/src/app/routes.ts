@@ -30,6 +30,12 @@ const routeConfig: Routes = [
     title: 'Customer login',
   },
   {
+    path: 'customer/home',
+    component: CustomerHome,
+    canActivate: [customerAuthGuard],
+    title: 'My loan applications',
+  },
+  {
     path: 'apply',
     component: LoanApplication,
     canActivate: [customerAuthGuard],
